@@ -85,7 +85,7 @@ function clickFunction(e){
             lastClick = new Date().getTime();
         } else {
             if (((new Date().getTime()) - lastClick) < 400){
-                isDblclicking = 2;
+                isDblclicking = true;
                 localStorage.setItem("dragID", this.id);
                 localStorage.setItem("itemX", this.style.left);
                 localStorage.setItem("itemY", this.style.top);
@@ -120,10 +120,6 @@ function mousemoveFunction(e){
 
     originX = mouseX;
     originY = mouseY;
-
-    if (isDblclicking == 1){
-        isDblclicking = 2;
-    }
 }
 
 
