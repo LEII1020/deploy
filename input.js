@@ -52,7 +52,7 @@ function clickFunction(e){
     e.preventDefault();
     e.stopPropagation();
 
-    if (isMoving && isDblclicking && deviceType == "touch"){
+    if (isMoving && isDblclicking){
         isMoving = false;
         isDblclicking = false;
         return;
@@ -89,6 +89,7 @@ function clickFunction(e){
             originY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
 
             document.addEventListener(events[deviceType].move, mousemoveFunction);
+            return;
         }
         lastClick = time;
     }
