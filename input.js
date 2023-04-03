@@ -17,19 +17,53 @@ for (var i = 0; i < boxes.length; i++){
 var isMoving = false;
 var isDblclicking = false;
 
-let originX;
-let originY;
+let lastClick = 0;
+let originX = null;
+let originY = null;
+let deviceType = "";
+
+let events = {
+    mouse: {
+        down: "mousedown",
+        move: "mousemove",
+        up: "mouseup",
+    },
+    touch: {
+        down: "touchstart",
+        move: "touchmove",
+        up: "touchend",
+    },
+}
 
 /* Function */
+function isMoble(){
+    try{
+        document.createEvent("TouchEvent");
+        deviceType = "touch";
+        return true;
+    } catch(e) {
+        deviceType = "mouse";
+        return false;
+    }
+}
+isMoble();
+
 function clickFunction(e){
+    e.preventDefault();
     e.stopPropagation();
+
+    if (isMoving && isDblclicking && deviceType == "touch"){
+        isMoving = false;
+        isDblclicking = false;
+        return;
+    }
     
-    if (isMoving == true){
+    if (isMoving){
         isMoving = false;
         return;
     }
 
-    if (isDblclicking == true){
+    if (isDblclicking){
         isDblclicking = false;
         return;
     }
@@ -38,6 +72,28 @@ function clickFunction(e){
         document.getElementById(localStorage.getItem("selectedID")).style.backgroundColor = "red";
         return;
     }
+
+    if(deviceType == "touch"){
+        let date = new Date();
+        let time = date.getTime();
+
+        const time_between_taps = 400;
+
+        if (time - lastClick < time_between_taps) {
+            localStorage.setItem("dragID", this.id);
+            localStorage.setItem("itemX", this.style.left);
+            localStorage.setItem("itemY", this.style.top);
+            isDblclicking = true;
+
+            originX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
+            originY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
+
+            document.addEventListener(events[deviceType].move, mousemoveFunction);
+        }
+        lastClick = time;
+    }
+
+
 
     var nowBoxID = localStorage.getItem("selectedID");
     if (nowBoxID !== this.id && nowBoxID !== null && document.getElementById(nowBoxID) !== null){
@@ -51,8 +107,9 @@ function mousemoveFunction(e){
     e.stopPropagation();
     isMoving = true;
     var dragBox = document.getElementById(localStorage.getItem("dragID"));
-    let mouseX = parseInt(e.clientX);
-    let mouseY = parseInt(e.clientY);
+    let mouseX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
+    let mouseY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
+
     let dx = mouseX - originX;
     let dy = mouseY - originY;
 
@@ -76,28 +133,26 @@ function mousemoveFunction(e){
         localStorage.setItem("dragID", this.id);
         localStorage.setItem("itemX", this.style.left);
         localStorage.setItem("itemY", this.style.top);
-        console.log(`in dblclick: ${localStorage.getItem("dragID")} left: ${localStorage.getItem("itemX")} top: ${localStorage.getItem("itemY")}`);
         isDblclicking = true;
 
-        originX = parseInt(e.clientX);
-        originY = parseInt(e.clientY);
+        originX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
+        originY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
 
-        document.addEventListener("mousemove", mousemoveFunction);
+        document.addEventListener(events[deviceType].move, mousemoveFunction);
     })
 
-    item.addEventListener("mousedown", function(e){
+    item.addEventListener(events[deviceType].down, function(e){
         e.preventDefault();
         console.log(this.style.left);
         localStorage.setItem("dragID", this.id);
         localStorage.setItem("itemX", this.style.left);
         localStorage.setItem("itemY", this.style.top);
-        console.log(`in dblclick: ${localStorage.getItem("dragID")} left: ${localStorage.getItem("itemX")} top: ${localStorage.getItem("itemY")}`);
         isMoving = false;
 
-        originX = parseInt(e.clientX);
-        originY = parseInt(e.clientY);
+        originX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
+        originY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
 
-        document.addEventListener("mousemove", mousemoveFunction);
+        document.addEventListener(events[deviceType].move, mousemoveFunction);
     })
 
     document.addEventListener("mouseup", function(e){
@@ -106,7 +161,7 @@ function mousemoveFunction(e){
 
     document.addEventListener("keydown", function(e){
         if (e.code == "Escape" && (isMoving || isDblclicking)){
-            document.removeEventListener("mousemove", mousemoveFunction);
+            document.removeEventListener(events[deviceType].move, mousemoveFunction);
             
             var dragBox = document.getElementById(localStorage.getItem("dragID"));
             dragBox.style["left"] = localStorage.getItem("itemX");
