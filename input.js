@@ -16,6 +16,7 @@ for (var i = 0; i < boxes.length; i++){
 
 var isMoving = false;
 var isDblclicking = false;
+var throughMove = false;
 
 let lastClick = 0;
 let originX = null;
@@ -51,27 +52,19 @@ isMoble();
 function clickFunction(e){
     e.preventDefault();
     e.stopPropagation();
-    console.log(`click! isMoving: ${isMoving} isDblclick: ${isDblclicking}`);
 
-    if (isMoving && isDblclicking){
-        isMoving = false;
-        isDblclicking = false;
-        document.removeEventListener("mousemove", mousemoveFunction);
-        this.removeEventListener(events[deviceType].move, mousemoveFunction);
-        return;
-    }
-    
     if (isMoving){
-        document.removeEventListener("mousemove", mousemoveFunction);
-        this.removeEventListener(events[deviceType].move, mousemoveFunction);
-        isMoving = false;
-        return;
-    }
-
-    if (isDblclicking){
-        isDblclicking = false;
-        document.removeEventListener("mousemove", mousemoveFunction);
-        this.removeEventListener(events[deviceType].move, mousemoveFunction);
+        if (!isDblclicking){
+            document.removeEventListener(events[deviceType].move, mousemoveFunction);
+            isMoving = false;
+            return;
+        }
+        if (throughMove){
+            throughMove = false;
+        } else {
+            isDblclicking = false;
+            document.removeEventListener(events[deviceType].move, mousemoveFunction);
+        }
         return;
     }
 
@@ -80,31 +73,6 @@ function clickFunction(e){
         return;
     }
 
-    if(deviceType == "touch"){
-        if (lastClick == 0){
-            lastClick = new Date().getTime();
-        } else {
-            if (((new Date().getTime()) - lastClick) < 400){
-                isDblclicking = true;
-                localStorage.setItem("dragID", this.id);
-                localStorage.setItem("itemX", this.style.left);
-                localStorage.setItem("itemY", this.style.top);
-                isDblclicking = true;
-
-                originX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
-                originY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
-
-                document.addEventListener(events[deviceType].move, mousemoveFunction);
-                lastClick = 0;
-                return;
-            } else {
-                lastClick = new Date().getTime();
-            }
-        }
-    }
-
-    console.log("still click!");
-
     var nowBoxID = localStorage.getItem("selectedID");
     if (nowBoxID !== this.id && nowBoxID !== null && document.getElementById(nowBoxID) !== null){
         document.getElementById(nowBoxID).style.backgroundColor = "red";
@@ -112,13 +80,34 @@ function clickFunction(e){
     localStorage.setItem("selectedID", this.id);
     this.style.backgroundColor = "#00f";
 
-    console.log("done click!");
+    if(deviceType == "touch"){ 
+        if (lastClick == 0){
+            lastClick = new Date().getTime();
+        } else {
+            if (((new Date().getTime()) - lastClick) < 400){
+                isDblclicking = 2;
+                localStorage.setItem("dragID", this.id);
+                localStorage.setItem("itemX", this.style.left);
+                localStorage.setItem("itemY", this.style.top);
+
+                originX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
+                originY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
+
+                document.addEventListener(events[deviceType].move, mousemoveFunction);
+                lastClick = 0;
+
+            } else {
+                lastClick = new Date().getTime();
+            }
+        }
+    }
 }
 
 function mousemoveFunction(e){
     e.stopPropagation();
-    console.log(e);
     isMoving = true;
+    throughMove = true; 
+
     var dragBox = document.getElementById(localStorage.getItem("dragID"));
     let mouseX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
     let mouseY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
@@ -132,13 +121,16 @@ function mousemoveFunction(e){
     originX = mouseX;
     originY = mouseY;
 
+    if (isDblclicking == 1){
+        isDblclicking = 2;
+    }
 }
 
 
 /* addEventListener */
 [...document.querySelectorAll(".target")].forEach(function(item){
 
-    item.addEventListener("click", clickFunction);
+    item.addEventListener(events[deviceType].up, clickFunction);
 
     item.addEventListener("dblclick", function(e){
         e.preventDefault();
@@ -168,11 +160,11 @@ function mousemoveFunction(e){
     })
 
 
-    if (!isDblclicking){
-        document.addEventListener(events[deviceType].up, function(e){
+    document.addEventListener(events[deviceType].up, function(e){
+        if (!isDblclicking){
             document.removeEventListener(events[deviceType].move, mousemoveFunction);
-        })
-    }
+        }
+    })
 
     document.addEventListener("keydown", function(e){
         if (e.code == "Escape" && (isMoving || isDblclicking)){
