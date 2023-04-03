@@ -51,21 +51,24 @@ isMoble();
 function clickFunction(e){
     e.preventDefault();
     e.stopPropagation();
-    console.log(`click! isMoving: ${isMoving} isdblclick: ${isDblclicking} isMobile: ${isMoble}`);
+    console.log(`click! isMoving: ${isMoving} isDblclick: ${isDblclicking} isMobile: ${isMoble()}`);
 
     if (isMoving && isDblclicking){
         isMoving = false;
         isDblclicking = false;
+        document.removeEventListener(events[deviceType].move, mousemoveFunction);
         return;
     }
     
     if (isMoving){
+        document.removeEventListener(events[deviceType].move, mousemoveFunction);
         isMoving = false;
         return;
     }
 
     if (isDblclicking){
         isDblclicking = false;
+        document.removeEventListener(events[deviceType].move, mousemoveFunction);
         return;
     }
 
@@ -79,6 +82,7 @@ function clickFunction(e){
             lastClick = new Date().getTime();
         } else {
             if (((new Date().getTime()) - lastClick) < 400){
+                isDblclicking = true;
                 localStorage.setItem("dragID", this.id);
                 localStorage.setItem("itemX", this.style.left);
                 localStorage.setItem("itemY", this.style.top);
@@ -130,7 +134,7 @@ function mousemoveFunction(e){
 /* addEventListener */
 [...document.querySelectorAll(".target")].forEach(function(item){
 
-    item.addEventListener(events[deviceType].down, clickFunction);
+    item.addEventListener("click", clickFunction);
 
     item.addEventListener("dblclick", function(e){
         e.preventDefault();
@@ -170,6 +174,8 @@ function mousemoveFunction(e){
             var dragBox = document.getElementById(localStorage.getItem("dragID"));
             dragBox.style["left"] = localStorage.getItem("itemX");
             dragBox.style["top"] = localStorage.getItem("itemY");
+            isDblclicking = false;
+            isMoving = false;
         }
     })
     
