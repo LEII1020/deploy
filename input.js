@@ -51,24 +51,27 @@ isMoble();
 function clickFunction(e){
     e.preventDefault();
     e.stopPropagation();
-    console.log(`click! isMoving: ${isMoving} isDblclick: ${isDblclicking} isMobile: ${isMoble()}`);
+    console.log(`click! isMoving: ${isMoving} isDblclick: ${isDblclicking}`);
 
     if (isMoving && isDblclicking){
         isMoving = false;
         isDblclicking = false;
-        document.removeEventListener(events[deviceType].move, mousemoveFunction);
+        document.removeEventListener("mousemove", mousemoveFunction);
+        this.removeEventListener(events[deviceType].move, mousemoveFunction);
         return;
     }
     
     if (isMoving){
-        document.removeEventListener(events[deviceType].move, mousemoveFunction);
+        document.removeEventListener("mousemove", mousemoveFunction);
+        this.removeEventListener(events[deviceType].move, mousemoveFunction);
         isMoving = false;
         return;
     }
 
     if (isDblclicking){
         isDblclicking = false;
-        document.removeEventListener(events[deviceType].move, mousemoveFunction);
+        document.removeEventListener("mousemove", mousemoveFunction);
+        this.removeEventListener(events[deviceType].move, mousemoveFunction);
         return;
     }
 
@@ -114,6 +117,7 @@ function clickFunction(e){
 
 function mousemoveFunction(e){
     e.stopPropagation();
+    console.log(e);
     isMoving = true;
     var dragBox = document.getElementById(localStorage.getItem("dragID"));
     let mouseX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
@@ -163,9 +167,12 @@ function mousemoveFunction(e){
         document.addEventListener(events[deviceType].move, mousemoveFunction);
     })
 
-    document.addEventListener("mouseup", function(e){
-        document.removeEventListener("mousemove", mousemoveFunction);
-    })
+
+    if (!isDblclicking){
+        document.addEventListener(events[deviceType].up, function(e){
+            document.removeEventListener(events[deviceType].move, mousemoveFunction);
+        })
+    }
 
     document.addEventListener("keydown", function(e){
         if (e.code == "Escape" && (isMoving || isDblclicking)){
