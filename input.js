@@ -51,6 +51,7 @@ isMoble();
 function clickFunction(e){
     e.preventDefault();
     e.stopPropagation();
+    console.log("click!");
 
     if (isMoving && isDblclicking){
         isMoving = false;
@@ -74,27 +75,28 @@ function clickFunction(e){
     }
 
     if(deviceType == "touch"){
-        let date = new Date();
-        let time = date.getTime();
+        if (lastClick == 0){
+            lastClick = new Date().getTime();
+        } else {
+            if (((new Date().getTime()) - lastClick) < 400){
+                localStorage.setItem("dragID", this.id);
+                localStorage.setItem("itemX", this.style.left);
+                localStorage.setItem("itemY", this.style.top);
+                isDblclicking = true;
 
-        const time_between_taps = 400;
+                originX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
+                originY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
 
-        if (time - lastClick < time_between_taps) {
-            localStorage.setItem("dragID", this.id);
-            localStorage.setItem("itemX", this.style.left);
-            localStorage.setItem("itemY", this.style.top);
-            isDblclicking = true;
-
-            originX = !isMoble() ? parseInt(e.clientX) : parseInt(e.touches[0].clientX);
-            originY = !isMoble() ? parseInt(e.clientY) : parseInt(e.touches[0].clientY);
-
-            document.addEventListener(events[deviceType].move, mousemoveFunction);
-            return;
+                document.addEventListener(events[deviceType].move, mousemoveFunction);
+                lastClick = 0;
+                return;
+            } else {
+                lastClick = new Date().getTime();
+            }
         }
-        lastClick = time;
     }
 
-
+    console.log("still click!");
 
     var nowBoxID = localStorage.getItem("selectedID");
     if (nowBoxID !== this.id && nowBoxID !== null && document.getElementById(nowBoxID) !== null){
@@ -102,6 +104,8 @@ function clickFunction(e){
     }
     localStorage.setItem("selectedID", this.id);
     this.style.backgroundColor = "#00f";
+
+    console.log("done click!");
 }
 
 function mousemoveFunction(e){
@@ -126,7 +130,7 @@ function mousemoveFunction(e){
 /* addEventListener */
 [...document.querySelectorAll(".target")].forEach(function(item){
 
-    item.addEventListener("click", clickFunction);
+    item.addEventListener(events[deviceType].down, clickFunction);
 
     item.addEventListener("dblclick", function(e){
         e.preventDefault();
