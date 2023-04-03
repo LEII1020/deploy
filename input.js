@@ -51,7 +51,7 @@ isMoble();
 function clickFunction(e){
     e.preventDefault();
     e.stopPropagation();
-    console.log("click!");
+    console.log(`click! isMoving: ${isMoving} isdblclick: ${isDblclicking} isMobile: ${isMoble}`);
 
     if (isMoving && isDblclicking){
         isMoving = false;
@@ -148,7 +148,6 @@ function mousemoveFunction(e){
 
     item.addEventListener(events[deviceType].down, function(e){
         e.preventDefault();
-        console.log(this.style.left);
         localStorage.setItem("dragID", this.id);
         localStorage.setItem("itemX", this.style.left);
         localStorage.setItem("itemY", this.style.top);
