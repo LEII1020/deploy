@@ -63,16 +63,18 @@ if (isMoble()){
         }
         [...e.changedTouches].forEach(touch => {
             const dot = document.createElement("div");
-            dot.style = `background-color: black; top: ${touch.pageY}px; left: ${touch.pageX}px; width: 50px; height: 50px; border-radius: 50%; position: absolute;`;
+            dot.style = `top: ${touch.pageY}px; left: ${touch.pageX}px; width: 50px; height: 50px; border-radius: 50%; position: absolute;`;
             dot.id = `dot${touch.identifier}`;
             workspace.append(dot);
+            console.log("create dot", dot.id);
         })
     }
 
     function clickFunction(e){
-        ;[...e.changedTouches].forEach(touch => {
+        [...e.changedTouches].forEach(touch => {
             const dot = document.getElementById(`dot${touch.identifier}`);
             dot.remove();
+            console.log("remove dot", dot.id);
         })
 
         e.preventDefault();
