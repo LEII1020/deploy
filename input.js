@@ -165,16 +165,18 @@ if (isMoble()){
         item.addEventListener("touchstart", function(e){
             e.preventDefault();
             console.log("167", localStorage.getItem("dragID", null));
-
-            localStorage.setItem("dragID", this.id);
-            localStorage.setItem("itemX", this.style.left);
-            localStorage.setItem("itemY", this.style.top);
+            if (!isDblclicking){
+                localStorage.setItem("dragID", this.id);
+                localStorage.setItem("itemX", this.style.left);
+                localStorage.setItem("itemY", this.style.top);
+                
+                console.log("173", localStorage.getItem("dragID", null));
+        
+                originX = parseInt(e.changedTouches[0].clientX);
+                originY = parseInt(e.changedTouches[0].clientY);
+            }
+            
             isMoving = false;
-            console.log("173", localStorage.getItem("dragID", null));
-    
-            originX = parseInt(e.changedTouches[0].clientX);
-            originY = parseInt(e.changedTouches[0].clientY);
-    
             document.addEventListener("touchmove", mousemoveFunction);
         })
     })
@@ -184,7 +186,7 @@ if (isMoble()){
     workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
-        console.log("187", localStorage.getItem("dragID", null));
+        console.log("189", localStorage.getItem("dragID", null));
         console.log(localStorage.getItem("dragID", this.id), "is moving");
 
         /*if (e.touches.length == 2){ //取消與size的變化
