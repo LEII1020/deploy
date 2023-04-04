@@ -134,7 +134,7 @@ if (isMoble()){
     }
     
     function mousemoveFunction(e){
-        console.log(e.type, this);
+        console.log(localStorage.setItem("dragID", this.id), "is moving");
         e.stopPropagation();
         isMoving = true;
     
@@ -179,6 +179,7 @@ if (isMoble()){
     workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
+        console.log(localStorage.setItem("dragID", this.id), "is moving");
 
         /*if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
