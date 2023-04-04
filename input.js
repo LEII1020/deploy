@@ -157,7 +157,7 @@ if (isMoble()){
     /* addEventListener */
     [...document.querySelectorAll(".target")].forEach(function(item){
     
-        item.addEventListener("touchend", clickFunction);
+        item.addEventListener("touchend touchcancel", clickFunction);
     
         item.addEventListener("touchstart", function(e){
             e.preventDefault();
@@ -180,8 +180,6 @@ if (isMoble()){
         e.preventDefault();
         isMoving = true;
 
-        console.log("Num", e.touches.length);
-
         /*if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
                 document.removeEventListener("mousemove", mousemoveFunction);
@@ -196,7 +194,7 @@ if (isMoble()){
         }*/
     })
 
-    workspace.addEventListener("touchend", clickFunction);
+    workspace.addEventListener("touchend touchcancel", clickFunction);
 
     /*document.addEventListener("touchmove", function(e){
         e.preventDefault();
