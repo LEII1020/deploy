@@ -98,8 +98,10 @@ if (isMoble()){
         }
 
         if (!isDblclicking && isMoving){ //drag結束
+            console.log("101", localStorage.getItem("dragID", null));
             isMoving = false;
             localStorage.setItem("dragID", null);
+            console.log("104", localStorage.getItem("dragID", null));
             document.removeEventListener("touchmove", mousemoveFunction);
             return;
         }
@@ -121,11 +123,11 @@ if (isMoble()){
 
         if (isDblclick()){
             isDblclicking = true;
-
+            console.log("126", localStorage.getItem("dragID", null));
             localStorage.setItem("dragID", this.id);
             localStorage.setItem("itemX", this.style.left);
             localStorage.setItem("itemY", this.style.top);
-
+            console.log("130", localStorage.getItem("dragID", null));
             originX = parseInt(e.changedTouches[0].clientX);
             originY = parseInt(e.changedTouches[0].clientY);
 
@@ -134,7 +136,8 @@ if (isMoble()){
     }
     
     function mousemoveFunction(e){
-        console.log(localStorage.setItem("dragID", this.id), "is moving");
+        console.log("139", localStorage.getItem("dragID", null));
+        console.log(localStorage.getItem("dragID", this.id), "is moving");
         e.stopPropagation();
         isMoving = true;
     
@@ -161,11 +164,13 @@ if (isMoble()){
     
         item.addEventListener("touchstart", function(e){
             e.preventDefault();
+            console.log("167", localStorage.getItem("dragID", null));
 
             localStorage.setItem("dragID", this.id);
             localStorage.setItem("itemX", this.style.left);
             localStorage.setItem("itemY", this.style.top);
             isMoving = false;
+            console.log("173", localStorage.getItem("dragID", null));
     
             originX = parseInt(e.changedTouches[0].clientX);
             originY = parseInt(e.changedTouches[0].clientY);
@@ -179,7 +184,8 @@ if (isMoble()){
     workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
-        console.log(localStorage.setItem("dragID", this.id), "is moving");
+        console.log("187", localStorage.getItem("dragID", null));
+        console.log(localStorage.getItem("dragID", this.id), "is moving");
 
         /*if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
