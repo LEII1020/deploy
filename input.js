@@ -133,7 +133,6 @@ if (isMoble()){
     }
     
     function mousemoveFunction(e){
-        console.log(`${e.type} in mousemove in ${this}`);
         e.stopPropagation();
         isMoving = true;
     
@@ -159,7 +158,6 @@ if (isMoble()){
         item.addEventListener("touchend", clickFunction);
     
         item.addEventListener("touchstart", function(e){
-            console.log(`${e.type} in down`);
             e.preventDefault();
 
             localStorage.setItem("dragID", this.id);
@@ -174,7 +172,6 @@ if (isMoble()){
         })
     
         document.addEventListener("keydown", function(e){
-            console.log(e.type);
             if (e.code == "Escape" && (isMoving || isDblclicking)){
                 document.removeEventListener(events[deviceType].move, mousemoveFunction);
                 
@@ -190,6 +187,8 @@ if (isMoble()){
     workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
+
+        console.log("Num", e.touches.length);
 
         if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
@@ -207,7 +206,7 @@ if (isMoble()){
 
     workspace.addEventListener("touchend", clickFunction);
 
-    document.addEventListener("touchmove", function(e){
+    /*document.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
 
@@ -221,9 +220,9 @@ if (isMoble()){
             }
             /*if (selectedBox != null){
 
-            }*/
+            }
         }
-    })
+    })*/
 
 
 
