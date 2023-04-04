@@ -71,7 +71,7 @@ if (isMoble()){
         })*/
     }
 
-    function clickFunction(e){
+    function touchendFunction(e){
         /*[...e.changedTouches].forEach(touch => {
             const dot = document.getElementById(`dot${touch.identifier}`);
             dot.remove();
@@ -157,7 +157,7 @@ if (isMoble()){
     /* addEventListener */
     [...document.querySelectorAll(".target")].forEach(function(item){
     
-        item.addEventListener("touchend touchcancel", clickFunction);
+        item.addEventListener("touchend", touchendFunction);
     
         item.addEventListener("touchstart", function(e){
             e.preventDefault();
@@ -194,7 +194,7 @@ if (isMoble()){
         }*/
     })
 
-    workspace.addEventListener("touchend touchcancel", clickFunction);
+    workspace.addEventListener("touchend", touchendFunction);
 
     /*document.addEventListener("touchmove", function(e){
         e.preventDefault();
