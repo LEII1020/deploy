@@ -57,6 +57,7 @@ if (isMoble()){
 
     /* Function */
     function touchstartFunction(e) {
+        console.log(e.type, this);
         e.preventDefault();
         if (isDblclicking){
             isMoving = false;
@@ -133,6 +134,7 @@ if (isMoble()){
     }
     
     function mousemoveFunction(e){
+        console.log(e.type, this);
         e.stopPropagation();
         isMoving = true;
     
@@ -170,16 +172,6 @@ if (isMoble()){
     
             document.addEventListener("touchmove", mousemoveFunction);
         })
-    
-        document.addEventListener("keydown", function(e){
-            if (e.code == "Escape" && (isMoving || isDblclicking)){
-                document.removeEventListener(events[deviceType].move, mousemoveFunction);
-                
-                var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                dragBox.style["left"] = localStorage.getItem("itemX");
-                dragBox.style["top"] = localStorage.getItem("itemY");
-            }
-        })
     })
 
     workspace.addEventListener("touchstart", touchstartFunction)
@@ -190,7 +182,7 @@ if (isMoble()){
 
         console.log("Num", e.touches.length);
 
-        if (e.touches.length == 2){ //取消與size的變化
+        /*if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
                 document.removeEventListener("mousemove", mousemoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
@@ -201,7 +193,7 @@ if (isMoble()){
             if (selectedBox != null){
 
             }
-        }
+        }*/
     })
 
     workspace.addEventListener("touchend", clickFunction);
