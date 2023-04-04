@@ -21,6 +21,9 @@ let lastClick = 0;
 let originX = null;
 let originY = null;
 let deviceType = "";
+let selectedBox = null;
+
+localStorage.setItem("dragID", null);
 
 /* Function */
 function isMoble(){
@@ -53,10 +56,29 @@ function isDblclick(){
 if (isMoble()){
 
     /* Function */
+    function touchstartFunction(e) {
+        e.preventDefault();
+        if (isDblclicking){
+            isMoving = false;
+        }
+        [...e.changedTouches].forEach(touch => {
+            const dot = document.createElement("div");
+            dot.style = `background-color: black; top: ${touch.pageY}px; left: ${touch.pageX}px; width: 50px; height: 50px; border-radius: 50%; position: absolute;`;
+            dot.id = `dot${touch.identifier}`;
+            workspace.append(dot);
+        })
+    }
+
     function clickFunction(e){
+        ;[...e.changedTouches].forEach(touch => {
+            const dot = document.getElementById(`dot${touch.identifier}`);
+            dot.remove();
+        })
+
         e.preventDefault();
         e.stopPropagation();
         console.log(`${e.type} in ${this.id} ${isMoving} ${isDblclicking}`);
+        
 
         if (isMoving && isDblclicking){
             return;
@@ -74,11 +96,13 @@ if (isMoble()){
 
         if (!isDblclicking && isMoving){ //drag結束
             isMoving = false;
+            localStorage.setItem("dragID", null);
             document.removeEventListener("touchmove", mousemoveFunction);
             return;
         }
 
         if (this.id == "workspace" && !isMoving){ //取消選取
+            selectedBox = null;
             document.getElementById(localStorage.getItem("selectedID")).style.backgroundColor = "red";
             return;
         }
@@ -88,6 +112,7 @@ if (isMoble()){
             document.getElementById(nowBoxID).style.backgroundColor = "red";
         }
         localStorage.setItem("selectedID", this.id);
+        selectedBox = this.id;
         this.style.backgroundColor = "#00f";
 
 
@@ -106,7 +131,7 @@ if (isMoble()){
     }
     
     function mousemoveFunction(e){
-        console.log(`${e.type} in mousemove`);
+        console.log(`${e.type} in mousemove in ${this}`);
         e.stopPropagation();
         isMoving = true;
     
@@ -156,19 +181,46 @@ if (isMoble()){
                 dragBox.style["top"] = localStorage.getItem("itemY");
             }
         })
-        
     })
-    workspace.addEventListener("touchstart", function(e){
-        e.preventDefault();
-        if (isDblclicking){
-            isMoving = false;
-        }
-    })
+
+    workspace.addEventListener("touchstart", touchstartFunction)
+
     workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
+
+        if (e.touches.length == 2){ //取消與size的變化
+            if (localStorage.getItem("dragID") != null || isDblclicking){
+                document.removeEventListener("mousemove", mousemoveFunction);
+                var dragBox = document.getElementById(localStorage.getItem("dragID"));
+                dragBox.style["left"] = localStorage.getItem("itemX");
+                dragBox.style["top"] = localStorage.getItem("itemY");
+                return;
+            }
+            if (selectedBox != null){
+
+            }
+        }
     })
+
     workspace.addEventListener("touchend", clickFunction);
+
+    document.addEventListener("touchmove", function(e){
+        e.preventDefault();
+
+        if (e.touches.length == 2){ //取消與size的變化
+            if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
+                document.removeEventListener("mousemove", mousemoveFunction);
+                var dragBox = document.getElementById(localStorage.getItem("dragID"));
+                dragBox.style["left"] = localStorage.getItem("itemX");
+                dragBox.style["top"] = localStorage.getItem("itemY");
+                return;
+            }
+            /*if (selectedBox != null){
+
+            }*/
+        }
+    })
 
 
 
@@ -251,6 +303,7 @@ if (isMoble()){
             originX = parseInt(e.clientX);
             originY = parseInt(e.clientY);
 
+            
             document.addEventListener("mousemove", mousemoveFunction);
         })
 
