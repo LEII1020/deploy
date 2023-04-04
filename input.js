@@ -207,6 +207,7 @@ if (isMoble()){
 
     document.addEventListener("touchmove", function(e){
         e.preventDefault();
+        isMoving = true;
 
         if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
