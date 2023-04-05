@@ -12,14 +12,13 @@ var workspace = document.getElementById("workspace");
 var boxes = document.querySelectorAll(".target");  
 for (var i = 0; i < boxes.length; i++){
     boxes[i].id = i;
-    boxes[i].style.minWidth = "10px";
-    boxes[i].style.minHeight = "10px";
 }
 
 
 var isMoving = false; //紀錄是否正在移動(通常用於drag)
 var isDblclicking = false; //紀錄是否為跟隨的狀態
 var isSizing = false;
+var isHorizontal = false;
 var allCancel = false;
 
 let lastClick = 0;
@@ -97,6 +96,10 @@ if (isMoble()){
                 }
                 if (originY < 0){
                     originY = -originY;
+                }
+
+                if (originY/originX <= 1){ //水平的情況
+                    isHorizontal = true
                 }
 
                 document.addEventListener("touchmove", touchmoveFunction);
@@ -189,24 +192,23 @@ if (isMoble()){
         if (e.touches.length == 2){
             isSizing = true;
 
-            let lengthX = parseInt(e.changedTouches[0].clientX) - parseInt(e.changedTouches[1].clientX);
-            let lengthY = parseInt(e.changedTouches[0].clientY) - parseInt(e.changedTouches[1].clientY);
-
-            if (lengthX < 0){
-                lengthX = -lengthX;
+            if (isHorizontal && parseInt(selectedBox.style["width"].slice(0,-2)) > 10){
+                let lengthX = parseInt(e.changedTouches[0].clientX) - parseInt(e.changedTouches[1].clientX);
+                if (lengthX < 0){
+                    lengthX = -lengthX;
+                }
+                let dx = lengthX - originX;
+                selectedBox.style["width"] = parseInt(selectedBox.style["width"].slice(0,-2)) + dx + "px";
+                originX = lengthX;
+            } else if (!isHorizontal && parseInt(selectedBox.style["height"].slice(0,-2)) > 10) {
+                let lengthY = parseInt(e.changedTouches[0].clientY) - parseInt(e.changedTouches[1].clientY);
+                if (lengthY < 0){
+                    lengthY = -lengthY;
+                }
+                let dy = lengthY - originY;
+                selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
+                originY = lengthY;
             }
-            if (lengthY < 0){
-                lengthY = -lengthY;
-            }
-
-            let dx = lengthX - originX;
-            let dy = lengthY - originY;
-
-            selectedBox.style["width"] = parseInt(selectedBox.style["width"].slice(0,-2)) + dx + "px";
-            selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
-
-            originX = lengthX;
-            originY = lengthY;
 
         } else {
             if (isSizing){
