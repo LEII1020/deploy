@@ -114,10 +114,19 @@ if (isMoble()){
         e.preventDefault();
         e.stopPropagation();
         //console.log(e.type, isMoving, isDblclicking);
+
+        if(allCancel){
+            isDblclicking = false;
+            isMoving = false;
+            isSizing = false;
+            document.removeEventListener("touchmove", touchmoveFunction);
+            allCancel = false;
+        }
         
         if (e.touches.length == 0 && isSizing){
             isSizing = false;
             document.removeEventListener("touchmove", touchmoveFunction);
+            return;
         }
 
         if ((isMoving && isDblclicking) || (e.touches.length == 1 && isSizing)){
@@ -151,11 +160,6 @@ if (isMoble()){
             //console.log("104", localStorage.getItem("dragID"));
             document.removeEventListener("touchmove", touchmoveFunction);
             return;
-        }
-
-        if(allCancel){
-            isDblclicking = false;
-            isMoving = false;
         }
 
         if (this.id == "workspace" && !isMoving){ //取消選取
