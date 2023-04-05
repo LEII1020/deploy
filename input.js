@@ -61,7 +61,7 @@ if (isMoble()){
 
     /* Function */
 
-    function sizing(e){
+    function sizingFunction(e){
         e.preventDefault();
         e.stopPropagation();
         isSizing = true;
