@@ -176,7 +176,9 @@ if (isMoble()){
 
             console.log(e.type, localStorage.getItem("dragID"));
             isMoving = false;
-            document.addEventListener("touchmove", mousemoveFunction);
+            document.addEventListener("touchmove", function(e){
+                console.log("move");
+            });
         })
     })
 
