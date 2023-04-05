@@ -97,9 +97,11 @@ if (isMoble()){
                 if (originY < 0){
                     originY = -originY;
                 }
-
+                console.log(originX, originY, originY/originX)
                 if (originY/originX <= 1){ //水平的情況
-                    isHorizontal = true
+                    isHorizontal = true;
+                }else{
+                    isHorizontal = false;
                 }
 
                 document.addEventListener("touchmove", touchmoveFunction);
@@ -192,21 +194,26 @@ if (isMoble()){
         if (e.touches.length == 2){
             isSizing = true;
 
-            if (isHorizontal && parseInt(selectedBox.style["width"].slice(0,-2)) > 10){
+            if (isHorizontal){
                 let lengthX = parseInt(e.changedTouches[0].clientX) - parseInt(e.changedTouches[1].clientX);
                 if (lengthX < 0){
                     lengthX = -lengthX;
                 }
                 let dx = lengthX - originX;
-                selectedBox.style["width"] = parseInt(selectedBox.style["width"].slice(0,-2)) + dx + "px";
+                if ((parseInt(selectedBox.style["width"].slice(0,-2)) + dx) >= 10){
+                    selectedBox.style["width"] = parseInt(selectedBox.style["width"].slice(0,-2)) + dx + "px";
+                    selectedBox.style["left"] = (parseInt(dragBox.style["left"].slice(0,-2)) - (dx/2)) + "px";
+                }
                 originX = lengthX;
-            } else if (!isHorizontal && parseInt(selectedBox.style["height"].slice(0,-2)) > 10) {
+            } else {
                 let lengthY = parseInt(e.changedTouches[0].clientY) - parseInt(e.changedTouches[1].clientY);
                 if (lengthY < 0){
                     lengthY = -lengthY;
                 }
                 let dy = lengthY - originY;
-                selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
+                if ((parseInt(selectedBox.style["height"].slice(0,-2)) + dy) >= 10){
+                    selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
+                }
                 originY = lengthY;
             }
 
