@@ -16,6 +16,7 @@ for (var i = 0; i < boxes.length; i++){
 
 var isMoving = false; //紀錄是否正在移動(通常用於drag)
 var isDblclicking = false; //紀錄是否為跟隨的狀態
+var allCancel = false;
 
 let lastClick = 0;
 let originX = null;
@@ -57,7 +58,7 @@ if (isMoble()){
 
     /* Function */
     function touchstartFunction(e) {
-        console.log(e.type);
+        console.log(e.type, isMoving, isDblclicking);
         e.preventDefault();
 
         if (e.touches.length == 2){ //取消與size的變化
@@ -66,7 +67,7 @@ if (isMoble()){
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
                 dragBox.style["left"] = localStorage.getItem("itemX");
                 dragBox.style["top"] = localStorage.getItem("itemY");
-                isMoving = false;
+                allCancel = true;
                 return;
             }
         }
@@ -80,7 +81,7 @@ if (isMoble()){
 
         e.preventDefault();
         e.stopPropagation();
-        console.log(e.type);
+        console.log(e.type, isMoving, isDblclicking);
         
 
         if (isMoving && isDblclicking){
@@ -106,6 +107,11 @@ if (isMoble()){
             return;
         }
 
+        if(allCancel){
+            isDblclicking = false;
+            isMoving = false;
+        }
+
         if (this.id == "workspace" && !isMoving){ //取消選取
             selectedBox = null;
             document.getElementById(localStorage.getItem("selectedID")).style.backgroundColor = "red";
@@ -123,11 +129,9 @@ if (isMoble()){
 
         if (isDblclick()){
             isDblclicking = true;
-            //console.log("126", localStorage.getItem("dragID"));
             localStorage.setItem("dragID", this.id);
             localStorage.setItem("itemX", this.style.left);
             localStorage.setItem("itemY", this.style.top);
-            //console.log("130", localStorage.getItem("dragID"));
             originX = parseInt(e.changedTouches[0].clientX);
             originY = parseInt(e.changedTouches[0].clientY);
 
