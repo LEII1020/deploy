@@ -17,15 +17,15 @@ for (var i = 0; i < boxes.length; i++){
 
 var isMoving = false; //紀錄是否正在移動(通常用於drag)
 var isDblclicking = false; //紀錄是否為跟隨的狀態
-var isSizing = false;
-var isHorizontal = false;
-var allCancel = false;
+var isSizing = false; //紀錄是否為調整大小的狀態
+var isHorizontal = false; //紀錄為水平調整或垂直調整
+var allCancel = false; //紀錄abort
 
-let lastClick = 0;
-let originX = null;
+let lastClick = 0; //用來判斷是否為雙擊
+let originX = null;//調整座標
 let originY = null;
-let deviceType = "";
-let selectedBox = null;
+let deviceType = "";//判斷裝置為行動裝置或電腦
+let selectedBox = null;//被選取起來的箱子
 
 localStorage.setItem("dragID", null);
 
@@ -65,10 +65,9 @@ if (isMoble()){
     function touchstartFunction(e) {
         e.preventDefault();
 
-        if (e.touches.length == 2){ //取消與size的變化
+        if (e.touches.length == 2){ //負責abort 與 size的變化
 
-            console.log("two finger", selectedBox, localStorage.getItem("dragID"), isDblclicking);
-            if (localStorage.getItem("dragID") !== "null" || isDblclicking){ //取消拖移
+            if (localStorage.getItem("dragID") !== "null" || isDblclicking || isSizing){ //abort 取消拖移以及sizing
                 document.removeEventListener("touchmove", touchmoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
                 dragBox.style["left"] = localStorage.getItem("itemX");
@@ -110,26 +109,25 @@ if (isMoble()){
     }
 
     function touchendFunction(e){
-
         e.preventDefault();
         e.stopPropagation();
-        //console.log(e.type, isMoving, isDblclicking);
 
-        if(allCancel){
+        if(allCancel){ //abort
             isDblclicking = false;
             isMoving = false;
             isSizing = false;
             document.removeEventListener("touchmove", touchmoveFunction);
             allCancel = false;
+            return;
         }
         
-        if (e.touches.length == 0 && isSizing){
+        if (e.touches.length == 0 && isSizing){ //結束sizing
             isSizing = false;
             document.removeEventListener("touchmove", touchmoveFunction);
             return;
         }
 
-        if ((isMoving && isDblclicking) || (e.touches.length == 1 && isSizing)){
+        if ((isMoving && isDblclicking) || (e.touches.length == 1 && isSizing)){ //還在跟隨或sizing
             return;
         }
 
@@ -139,8 +137,18 @@ if (isMoble()){
             return;
         }
 
-        if (!isMoving && !isDblclicking && allCancel){ //absort
-            allCancel = false;
+        if (!isDblclicking && isMoving){ //drag結束
+            isMoving = false;
+            localStorage.setItem("dragID", null);
+            localStorage.setItem("itemX", null);
+            localStorage.setItem("itemY", null);
+            document.removeEventListener("touchmove", touchmoveFunction);
+            return;
+        }
+
+        if (this.id == "workspace" && !isMoving){ //取消選取
+            selectedBox = null;
+            document.getElementById(localStorage.getItem("selectedID")).style.backgroundColor = "red";
             return;
         }
 
@@ -151,22 +159,6 @@ if (isMoble()){
             localStorage.setItem("itemY", null);
         }
 
-        if (!isDblclicking && isMoving){ //drag結束
-            //console.log("101", localStorage.getItem("dragID"));
-            isMoving = false;
-            localStorage.setItem("dragID", null);
-            localStorage.setItem("itemX", null);
-            localStorage.setItem("itemY", null);
-            //console.log("104", localStorage.getItem("dragID"));
-            document.removeEventListener("touchmove", touchmoveFunction);
-            return;
-        }
-
-        if (this.id == "workspace" && !isMoving){ //取消選取
-            selectedBox = null;
-            document.getElementById(localStorage.getItem("selectedID")).style.backgroundColor = "red";
-            return;
-        }
 
         var nowBoxID = localStorage.getItem("selectedID"); //開始上色
         if (document.getElementById(nowBoxID) !== null && nowBoxID !== this.id && nowBoxID !== null){
@@ -190,8 +182,6 @@ if (isMoble()){
     }
     
     function touchmoveFunction(e){
-        //console.log("139", localStorage.getItem("dragID"));
-
         e.preventDefault();
         e.stopPropagation();
         
@@ -204,7 +194,7 @@ if (isMoble()){
                     lengthX = -lengthX;
                 }
                 let dx = lengthX - originX;
-                if ((parseInt(selectedBox.style["width"].slice(0,-2)) + dx) >= 10){
+                if ((parseInt(selectedBox.style["width"].slice(0,-2)) + dx) >= 20){
                     selectedBox.style["width"] = parseInt(selectedBox.style["width"].slice(0,-2)) + dx + "px";
                     selectedBox.style["left"] = (parseFloat(selectedBox.style["left"].slice(0,-2)) - (dx/2)) + "px";
                 }
@@ -215,7 +205,7 @@ if (isMoble()){
                     lengthY = -lengthY;
                 }
                 let dy = lengthY - originY;
-                if ((parseInt(selectedBox.style["height"].slice(0,-2)) + dy) >= 10){
+                if ((parseInt(selectedBox.style["height"].slice(0,-2)) + dy) >= 20){
                     selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
                     selectedBox.style["top"] = (parseFloat(selectedBox.style["top"].slice(0,-2)) - (dy/2)) + "px";
                 }
@@ -228,11 +218,9 @@ if (isMoble()){
             } else {
                 isMoving = true;
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
                 if (dragBox == null){
                     return;
                 }
-                //console.log("After dragbox");
                 let mouseX = parseInt(e.changedTouches[0].clientX);
                 let mouseY = parseInt(e.changedTouches[0].clientY);
             
@@ -242,8 +230,6 @@ if (isMoble()){
                 dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
                 dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
 
-                //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-            
                 originX = mouseX;
                 originY = mouseY;
             }
@@ -266,13 +252,10 @@ if (isMoble()){
                 localStorage.setItem("itemX", this.style.left);
                 localStorage.setItem("itemY", this.style.top);
                 
-                //console.log("173", localStorage.getItem("dragID"));
-        
                 originX = parseInt(e.changedTouches[0].clientX);
                 originY = parseInt(e.changedTouches[0].clientY);
             }
 
-            console.log(e.type, localStorage.getItem("dragID"));
             isMoving = false;
             document.addEventListener("touchmove", touchmoveFunction);
 
@@ -344,7 +327,7 @@ if (isMoble()){
             localStorage.setItem("dragID", this.id);
             localStorage.setItem("itemX", this.style.left);
             localStorage.setItem("itemY", this.style.top);
-            //console.log(`in dblclick: ${localStorage.getItem("dragID")} left: ${localStorage.getItem("itemX")} top: ${localStorage.getItem("itemY")}`);
+            
             isDblclicking = true;
 
             originX = parseInt(e.clientX);
@@ -355,11 +338,10 @@ if (isMoble()){
 
         item.addEventListener("mousedown", function(e){
             e.preventDefault();
-            //console.log(this.style.left);
+            
             localStorage.setItem("dragID", this.id);
             localStorage.setItem("itemX", this.style.left);
             localStorage.setItem("itemY", this.style.top);
-            //console.log(`in dblclick: ${localStorage.getItem("dragID")} left: ${localStorage.getItem("itemX")} top: ${localStorage.getItem("itemY")}`);
             isMoving = false;
 
             originX = parseInt(e.clientX);
