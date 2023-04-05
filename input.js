@@ -123,6 +123,10 @@ if (isMoble()){
             document.addEventListener("touchmove", mousemoveFunction);
         }
     }
+
+    function trying(e){
+        console.log("move");
+    }
     
     function mousemoveFunction(e){
         //console.log("139", localStorage.getItem("dragID"));
@@ -176,7 +180,7 @@ if (isMoble()){
 
             console.log(e.type, localStorage.getItem("dragID"));
             isMoving = false;
-            document.addEventListener("touchmove", mousemoveFunction);
+            document.addEventListener("touchmove", trying);
         })
     })
 
