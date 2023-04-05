@@ -54,7 +54,7 @@ function isDblclick(){
 }
 
 if (isMoble()){
-    console.log(isMoble());
+    console.log("happy");
 
     /* Function */
     function touchstartFunction(e) {
@@ -211,7 +211,7 @@ if (isMoble()){
     })*/
     
 } else {
-    console.log(isMoble());
+    console.log("cry");
 
 
     /* Function */
