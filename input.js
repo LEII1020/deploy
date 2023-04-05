@@ -175,15 +175,19 @@ if (isMoble()){
         
         if (e.touches.length == 2){
 
-            console.log("success", e.changedTouches[0].clientX);
+            console.log("success", e.changedTouches[0].clientX, e.changedTouches[1].clientX, e.changedTouches[0].clientY, e.changedTouches[1].clientY);
             isSizing = true;
 
             let lengthX = parseInt(e.changedTouches[0].clientX) - parseInt(e.changedTouches[1].clientX);
             let lengthY = parseInt(e.changedTouches[0].clientY) - parseInt(e.changedTouches[1].clientY);
-        
+            
+            console.log("success2");
+
             let dx = lengthX - originX;
             let dy = lengthY - originY;
-        
+
+            console.log(dx, dy);
+
             dragBox.style["width"] = parseInt(dragBox.style["width"].slice(0,-2)) + dx + "px";
             dragBox.style["height"] = parseInt(dragBox.style["height"].slice(0,-2)) + dx + "px";
             //dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
@@ -193,7 +197,7 @@ if (isMoble()){
             originX = lengthX;
             originY = lengthY;
 
-            console.log(dx, dy, touchPosition[0][0]);
+            
         
             return;
         }
