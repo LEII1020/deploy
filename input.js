@@ -147,11 +147,11 @@ if (isMoble()){
         isMoving = true;
     
         var dragBox = document.getElementById(localStorage.getItem("dragID"));
-        console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
+        //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
         if (dragBox == null){
             return;
         }
-        console.log("After dragbox");
+        //console.log("After dragbox");
         let mouseX = parseInt(e.changedTouches[0].clientX);
         let mouseY = parseInt(e.changedTouches[0].clientY);
     
@@ -161,7 +161,7 @@ if (isMoble()){
         dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
         dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
 
-        console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
+        //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
     
         originX = mouseX;
         originY = mouseY;
@@ -178,7 +178,6 @@ if (isMoble()){
             e.preventDefault();
 
             if (!isDblclicking){
-                console.log(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
                 localStorage.setItem("dragID", this.id);
                 localStorage.setItem("itemX", this.style.left);
                 localStorage.setItem("itemY", this.style.top);
