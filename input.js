@@ -78,12 +78,12 @@ if (isMoble()){
 
         if (!isMoving && isDblclicking){ //跟隨狀況下的普通的點擊
             isDblclicking = false;
-            document.removeEventListener("touchmove", mousemoveFunction);
+            document.removeEventListener("touchmove", touchmoveFunction);
             return;
         }
 
         if (!isMoving){ //普通的點擊
-            document.removeEventListener("touchmove", mousemoveFunction);
+            document.removeEventListener("touchmove", touchmoveFunction);
         }
 
         if (!isDblclicking && isMoving){ //drag結束
@@ -91,7 +91,7 @@ if (isMoble()){
             isMoving = false;
             localStorage.setItem("dragID", null);
             //console.log("104", localStorage.getItem("dragID"));
-            document.removeEventListener("touchmove", mousemoveFunction);
+            document.removeEventListener("touchmove", touchmoveFunction);
             return;
         }
 
@@ -120,7 +120,7 @@ if (isMoble()){
             originX = parseInt(e.changedTouches[0].clientX);
             originY = parseInt(e.changedTouches[0].clientY);
 
-            document.addEventListener("touchmove", mousemoveFunction);
+            document.addEventListener("touchmove", touchmoveFunction);
         }
     }
     
@@ -191,7 +191,7 @@ if (isMoble()){
 
         if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
-                document.removeEventListener("mousemove", mousemoveFunction);
+                document.removeEventListener("mousemove", touchmoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
                 dragBox.style["left"] = localStorage.getItem("itemX");
                 dragBox.style["top"] = localStorage.getItem("itemY");
@@ -211,7 +211,7 @@ if (isMoble()){
 
         if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
-                document.removeEventListener("mousemove", mousemoveFunction);
+                document.removeEventListener("mousemove", touchmoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
                 dragBox.style["left"] = localStorage.getItem("itemX");
                 dragBox.style["top"] = localStorage.getItem("itemY");
