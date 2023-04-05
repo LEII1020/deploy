@@ -94,6 +94,10 @@ if (isMoble()){
             return;
         }
 
+        if (!isMoving && !isDblclicking && allCancel){ //普通的點擊
+            return;
+        }
+
         if (!isMoving){ //普通的點擊
             document.removeEventListener("touchmove", touchmoveFunction);
         }
