@@ -67,9 +67,13 @@ if (isMoble()){
     function touchstartFunction(e) {
         e.preventDefault();
 
+        console.log(this, allCancel, trueCancel, selectedBox.id);
+
         if (e.touches.length == 2){ //負責abort 與 size的變化
 
-            if (trueCancel){
+            if (trueCancel || allCancel){
+                allCancel = true;
+                trueCancel = false;
                 return;
             }
 
@@ -120,7 +124,7 @@ if (isMoble()){
         e.stopPropagation();
 
         if(allCancel){ //abort
-            //isDblclicking = false;
+            isDblclicking = false;
             isMoving = false;
             isSizing = false;
             document.removeEventListener("touchmove", touchmoveFunction);
