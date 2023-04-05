@@ -126,6 +126,7 @@ if (isMoble()){
     
     function mousemoveFunction(e){
         //console.log("139", localStorage.getItem("dragID"));
+        e.preventDefault();
         e.stopPropagation();
         isMoving = true;
     
