@@ -113,7 +113,7 @@ if (isMoble()){
         e.stopPropagation();
 
         if(allCancel){ //abort
-            isDblclicking = false;
+            //isDblclicking = false;
             isMoving = false;
             isSizing = false;
             document.removeEventListener("touchmove", touchmoveFunction);
