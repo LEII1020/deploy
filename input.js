@@ -78,60 +78,12 @@ if (isMoble()){
 
         if (!isMoving && isDblclicking){ //跟隨狀況下的普通的點擊
             isDblclicking = false;
-            document.removeEventListener("touchmove", function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                isMoving = true;
-            
-                var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-                if (dragBox == null){
-                    return;
-                }
-                console.log("After dragbox");
-                let mouseX = parseInt(e.changedTouches[0].clientX);
-                let mouseY = parseInt(e.changedTouches[0].clientY);
-            
-                let dx = mouseX - originX;
-                let dy = mouseY - originY;
-            
-                dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
-                dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
-
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-            
-                originX = mouseX;
-                originY = mouseY;
-            });
+            document.removeEventListener("touchmove", mousemoveFunction);
             return;
         }
 
         if (!isMoving){ //普通的點擊
-            document.removeEventListener("touchmove", function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                isMoving = true;
-            
-                var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-                if (dragBox == null){
-                    return;
-                }
-                console.log("After dragbox");
-                let mouseX = parseInt(e.changedTouches[0].clientX);
-                let mouseY = parseInt(e.changedTouches[0].clientY);
-            
-                let dx = mouseX - originX;
-                let dy = mouseY - originY;
-            
-                dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
-                dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
-
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-            
-                originX = mouseX;
-                originY = mouseY;
-            });
+            document.removeEventListener("touchmove", mousemoveFunction);
         }
 
         if (!isDblclicking && isMoving){ //drag結束
@@ -139,31 +91,7 @@ if (isMoble()){
             isMoving = false;
             localStorage.setItem("dragID", null);
             //console.log("104", localStorage.getItem("dragID"));
-            document.removeEventListener("touchmove", function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                isMoving = true;
-            
-                var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-                if (dragBox == null){
-                    return;
-                }
-                console.log("After dragbox");
-                let mouseX = parseInt(e.changedTouches[0].clientX);
-                let mouseY = parseInt(e.changedTouches[0].clientY);
-            
-                let dx = mouseX - originX;
-                let dy = mouseY - originY;
-            
-                dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
-                dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
-
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-            
-                originX = mouseX;
-                originY = mouseY;
-            });
+            document.removeEventListener("touchmove", mousemoveFunction);
             return;
         }
 
@@ -192,39 +120,37 @@ if (isMoble()){
             originX = parseInt(e.changedTouches[0].clientX);
             originY = parseInt(e.changedTouches[0].clientY);
 
-            document.addEventListener("touchmove", function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                isMoving = true;
-            
-                var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-                if (dragBox == null){
-                    return;
-                }
-                console.log("After dragbox");
-                let mouseX = parseInt(e.changedTouches[0].clientX);
-                let mouseY = parseInt(e.changedTouches[0].clientY);
-            
-                let dx = mouseX - originX;
-                let dy = mouseY - originY;
-            
-                dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
-                dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
-
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-            
-                originX = mouseX;
-                originY = mouseY;
-            });
+            document.addEventListener("touchmove", mousemoveFunction);
         }
     }
     
-    /*function mousemoveFunction(e){
+    function mousemoveFunction(e){
         //console.log("139", localStorage.getItem("dragID"));
 
-        
-    }*/
+        e.preventDefault();
+        e.stopPropagation();
+        isMoving = true;
+    
+        var dragBox = document.getElementById(localStorage.getItem("dragID"));
+        console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
+        if (dragBox == null){
+            return;
+        }
+        console.log("After dragbox");
+        let mouseX = parseInt(e.changedTouches[0].clientX);
+        let mouseY = parseInt(e.changedTouches[0].clientY);
+    
+        let dx = mouseX - originX;
+        let dy = mouseY - originY;
+    
+        dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
+        dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
+
+        console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
+    
+        originX = mouseX;
+        originY = mouseY;
+    }
     
     
 
@@ -250,31 +176,7 @@ if (isMoble()){
 
             console.log(e.type, localStorage.getItem("dragID"));
             isMoving = false;
-            document.addEventListener("touchmove", function(e){
-                e.preventDefault();
-                e.stopPropagation();
-                isMoving = true;
-            
-                var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-                if (dragBox == null){
-                    return;
-                }
-                console.log("After dragbox");
-                let mouseX = parseInt(e.changedTouches[0].clientX);
-                let mouseY = parseInt(e.changedTouches[0].clientY);
-            
-                let dx = mouseX - originX;
-                let dy = mouseY - originY;
-            
-                dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
-                dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
-
-                console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-            
-                originX = mouseX;
-                originY = mouseY;
-            });
+            document.addEventListener("touchmove", mousemoveFunction);
         })
     })
 
