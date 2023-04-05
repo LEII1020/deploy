@@ -68,7 +68,7 @@ if (isMoble()){
 
         if (e.touches.length == 2){ //負責abort 與 size的變化
 
-            if (localStorage.getItem("dragID") !== "null" || isDblclicking || isSizing){ //abort 取消拖移以及sizing
+            if (localStorage.getItem("dragID") !== "null" || isDblclicking){ //abort 取消拖移以及sizing
                 document.removeEventListener("touchmove", touchmoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
                 dragBox.style["left"] = localStorage.getItem("itemX");
@@ -135,6 +135,7 @@ if (isMoble()){
         }
 
         if ((isMoving && isDblclicking) || (e.touches.length == 1 && isSizing)){ //還在跟隨或sizing
+            console.log("Yes");
             return;
         }
 
@@ -153,7 +154,7 @@ if (isMoble()){
             return;
         }
 
-        if (this.id == "workspace" && !isMoving){ //取消選取
+        if (this.id == "workspace" && !isMoving && !isSizing){ //取消選取
             selectedBox = null;
             document.getElementById(localStorage.getItem("selectedID")).style.backgroundColor = "red";
             return;
