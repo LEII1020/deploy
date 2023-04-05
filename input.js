@@ -63,8 +63,7 @@ if (isMoble()){
 
     function touchstartFunction(e) {
         e.preventDefault();
-        console.log("two finger", selectedBox, localStorage.getItem("dragID"), isDblclicking);
-
+        
         if (e.touches.length == 2){ //取消與size的變化
             console.log("two finger", selectedBox, localStorage.getItem("dragID"), isDblclicking);
             if (localStorage.getItem("dragID") !== "null" || isDblclicking){ //取消拖移
@@ -78,16 +77,20 @@ if (isMoble()){
             if (selectedBox != null){
                 console.log("insizing");
                 document.removeEventListener("touchmove", touchmoveFunction);
+                [...e.touches].forEach(touch => {
+                    touchPosition.push([touch.identifier, touch.clientX, touch.clientY]);
+                })
+                console.log(touchPosition);
                 isSizing = true;
                 var sizingBox = document.getElementById(selectedBox);
                 localStorage.setItem("sizingID", selectedBox);
                 localStorage.setItem("sizingX", sizingBox.style.left);
                 localStorage.setItem("sizingY", sizingBox.style.top);
 
-                [...e.changedTouches].forEach(touch => {
-                    touchPosition.push([touch.identifier, touch.clientX, touch.clientY]);
+                [...e.touches].forEach(touch => {
+                    touchPosition.pop();
                 })
-                console.log(touchPosition);
+                
             }
         }
 
