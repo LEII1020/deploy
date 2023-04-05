@@ -13,9 +13,11 @@ var boxes = document.querySelectorAll(".target");
 for (var i = 0; i < boxes.length; i++){
     boxes[i].id = i;
 }
+var touchPosition = [];
 
 var isMoving = false; //紀錄是否正在移動(通常用於drag)
 var isDblclicking = false; //紀錄是否為跟隨的狀態
+var isSizing = false;
 var allCancel = false;
 
 let lastClick = 0;
@@ -25,6 +27,7 @@ let deviceType = "";
 let selectedBox = null;
 
 localStorage.setItem("dragID", null);
+
 
 /* Function */
 function isMoble(){
@@ -57,9 +60,14 @@ function isDblclick(){
 if (isMoble()){
 
     /* Function */
+
     function touchstartFunction(e) {
         console.log(e.type, isMoving, isDblclicking);
         e.preventDefault();
+        [...e.changedTouches].forEach(touch => {
+            console.log(touch);
+            console.log(document.getElementById(selectedBox));
+        })
 
         if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
@@ -69,6 +77,19 @@ if (isMoble()){
                 dragBox.style["top"] = localStorage.getItem("itemY");
                 allCancel = true;
                 return;
+            }
+            if (selectedBox != null){
+                document.removeEventListener("touchmove", touchmoveFunction);
+                isSizing = true;
+                var sizingBox = document.getElementById(selectedBox);
+                localStorage.setItem("sizingID", selectedBox);
+                localStorage.setItem("sizingX", sizingBox.style.left);
+                localStorage.setItem("sizingY", sizingBox.style.top);
+
+                [...e.changedTouches].forEach(touch => {
+                    touchPosition.push([touch.identifier, touch.clientX, touch.clientY]);
+                })
+                console.log(touchPosition);
             }
         }
 
