@@ -63,9 +63,10 @@ if (isMoble()){
 
     function touchstartFunction(e) {
         e.preventDefault();
+        console.log("two finger", selectedBox, localStorage.getItem("dragID"), isDblclicking);
 
         if (e.touches.length == 2){ //取消與size的變化
-            console.log("two finger", selectedBox);
+            console.log("two finger", selectedBox, localStorage.getItem("dragID"), isDblclicking);
             if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
                 document.removeEventListener("touchmove", touchmoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
@@ -112,19 +113,24 @@ if (isMoble()){
             return;
         }
 
-        if (!isMoving && !isDblclicking && allCancel){ //普通的點擊
+        if (!isMoving && !isDblclicking && allCancel){ //absort
             allCancel = false;
             return;
         }
 
         if (!isMoving){ //普通的點擊
             document.removeEventListener("touchmove", touchmoveFunction);
+            localStorage.setItem("dragID", null);
+            localStorage.setItem("itemX", null);
+            localStorage.setItem("itemY", null);
         }
 
         if (!isDblclicking && isMoving){ //drag結束
             //console.log("101", localStorage.getItem("dragID"));
             isMoving = false;
             localStorage.setItem("dragID", null);
+            localStorage.setItem("itemX", null);
+            localStorage.setItem("itemY", null);
             //console.log("104", localStorage.getItem("dragID"));
             document.removeEventListener("touchmove", touchmoveFunction);
             return;
