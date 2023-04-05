@@ -130,6 +130,9 @@ if (isMoble()){
         isMoving = true;
     
         var dragBox = document.getElementById(localStorage.getItem("dragID"));
+        if (dragBox == null){
+            return;
+        }
         let mouseX = parseInt(e.changedTouches[0].clientX);
         let mouseY = parseInt(e.changedTouches[0].clientY);
     
@@ -168,7 +171,7 @@ if (isMoble()){
 
             console.log(e.type, localStorage.getItem("dragID"));
             isMoving = false;
-            document.addEventListener("touchmove", mousemoveFunction);
+            window.addEventListener("touchmove", mousemoveFunction);
         })
     })
 
