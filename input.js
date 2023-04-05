@@ -20,6 +20,7 @@ var isDblclicking = false; //紀錄是否為跟隨的狀態
 var isSizing = false; //紀錄是否為調整大小的狀態
 var isHorizontal = false; //紀錄為水平調整或垂直調整
 var allCancel = false; //紀錄abort
+var trueCancel = false; //紀錄abort，因為ablort後會有兩次的touchend
 
 let lastClick = 0; //用來判斷是否為雙擊
 let originX = null;//調整座標
@@ -118,6 +119,12 @@ if (isMoble()){
             isSizing = false;
             document.removeEventListener("touchmove", touchmoveFunction);
             allCancel = false;
+            trueCancel = true;
+            return;
+        }
+
+        if(trueCancel){
+            trueCancel = false;
             return;
         }
         
