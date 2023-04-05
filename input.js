@@ -12,8 +12,10 @@ var workspace = document.getElementById("workspace");
 var boxes = document.querySelectorAll(".target");  
 for (var i = 0; i < boxes.length; i++){
     boxes[i].id = i;
+    boxes[i].style.minWidth = "10px";
+    boxes[i].style.minHeight = "10px";
 }
-var touchPosition = [];
+
 
 var isMoving = false; //紀錄是否正在移動(通常用於drag)
 var isDblclicking = false; //紀錄是否為跟隨的狀態
@@ -65,6 +67,7 @@ if (isMoble()){
         e.preventDefault();
 
         if (e.touches.length == 2){ //取消與size的變化
+
             console.log("two finger", selectedBox, localStorage.getItem("dragID"), isDblclicking);
             if (localStorage.getItem("dragID") !== "null" || isDblclicking){ //取消拖移
                 document.removeEventListener("touchmove", touchmoveFunction);
@@ -74,15 +77,19 @@ if (isMoble()){
                 allCancel = true;
                 return;
             }
+
             if (selectedBox != null){
+
+                var touchPosition = [];
                 [...e.touches].forEach(touch => {
                     touchPosition.push([touch.clientX, touch.clientY]);
                 })
-                console.log(touchPosition);
+
                 isSizing = false;
                 localStorage.setItem("sizingID", selectedBox.id);
                 localStorage.setItem("sizingX", selectedBox.style.left);
                 localStorage.setItem("sizingY", selectedBox.style.top);
+
                 originX = parseInt(touchPosition[0][0]) - parseInt(touchPosition[1][0]);
                 originY = parseInt(touchPosition[0][1]) - parseInt(touchPosition[1][1]);
                 if (originX < 0){
@@ -108,7 +115,7 @@ if (isMoble()){
         //console.log(e.type, isMoving, isDblclicking);
         
 
-        if (isMoving && isDblclicking){
+        if ((isMoving && isDblclicking) || (e.touches.length == 1 && isSizing)){
             return;
         }
 
@@ -180,8 +187,6 @@ if (isMoble()){
         e.stopPropagation();
         
         if (e.touches.length == 2){
-
-            console.log("success", e.changedTouches[0].clientX, e.changedTouches[1].clientX, e.changedTouches[0].clientY, e.changedTouches[1].clientY);
             isSizing = true;
 
             let lengthX = parseInt(e.changedTouches[0].clientX) - parseInt(e.changedTouches[1].clientX);
@@ -193,44 +198,43 @@ if (isMoble()){
             if (lengthY < 0){
                 lengthY = -lengthY;
             }
-            
-            console.log("success2");
 
             let dx = lengthX - originX;
             let dy = lengthY - originY;
 
-            console.log(dx, dy, selectedBox.style["width"], "past");
-
             selectedBox.style["width"] = parseInt(selectedBox.style["width"].slice(0,-2)) + dx + "px";
             selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
-            //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-            console.log(dx, dy, selectedBox.style["width"], "now");
+
             originX = lengthX;
             originY = lengthY;
 
-            return;
-        }
+        } else {
+            if (isSizing){
 
-        isMoving = true;
-        var dragBox = document.getElementById(localStorage.getItem("dragID"));
-        //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-        if (dragBox == null){
-            return;
-        }
-        //console.log("After dragbox");
-        let mouseX = parseInt(e.changedTouches[0].clientX);
-        let mouseY = parseInt(e.changedTouches[0].clientY);
-    
-        let dx = mouseX - originX;
-        let dy = mouseY - originY;
-    
-        dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
-        dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
+            } else {
+                isMoving = true;
+                var dragBox = document.getElementById(localStorage.getItem("dragID"));
+                //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
+                if (dragBox == null){
+                    return;
+                }
+                //console.log("After dragbox");
+                let mouseX = parseInt(e.changedTouches[0].clientX);
+                let mouseY = parseInt(e.changedTouches[0].clientY);
+            
+                let dx = mouseX - originX;
+                let dy = mouseY - originY;
+            
+                dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
+                dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
 
-        //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-    
-        originX = mouseX;
-        originY = mouseY;
+                //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
+            
+                originX = mouseX;
+                originY = mouseY;
+            }
+        }
+        
     }
     
     
