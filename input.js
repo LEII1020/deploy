@@ -97,7 +97,7 @@ if (isMoble()){
                 if (originY < 0){
                     originY = -originY;
                 }
-                console.log(originX, originY, originY/originX)
+
                 if (originY/originX <= 1){ //水平的情況
                     isHorizontal = true;
                 }else{
@@ -202,7 +202,7 @@ if (isMoble()){
                 let dx = lengthX - originX;
                 if ((parseInt(selectedBox.style["width"].slice(0,-2)) + dx) >= 10){
                     selectedBox.style["width"] = parseInt(selectedBox.style["width"].slice(0,-2)) + dx + "px";
-                    selectedBox.style["left"] = (parseInt(dragBox.style["left"].slice(0,-2)) - (dx/2)) + "px";
+                    selectedBox.style["left"] = (parseFloat(selectedBox.style["left"].slice(0,-2)) - (dx/2)) + "px";
                 }
                 originX = lengthX;
             } else {
@@ -213,6 +213,7 @@ if (isMoble()){
                 let dy = lengthY - originY;
                 if ((parseInt(selectedBox.style["height"].slice(0,-2)) + dy) >= 10){
                     selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
+                    selectedBox.style["top"] = (parseFloat(selectedBox.style["top"].slice(0,-2)) - (dx/2)) + "px";
                 }
                 originY = lengthY;
             }
