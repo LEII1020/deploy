@@ -55,30 +55,18 @@ function isDblclick(){
 
 if (isMoble()){
 
-    /* Function 
+    /* Function */
     function touchstartFunction(e) {
         console.log(e.type, this);
         e.preventDefault();
         if (isDblclicking){
             isMoving = false;
         }
-        /*[...e.changedTouches].forEach(touch => {
-            const dot = document.createElement("div");
-            dot.style = `top: ${touch.pageY}px; left: ${touch.pageX}px; width: 50px; height: 50px; border-radius: 50%; position: absolute;`;
-            dot.id = `dot${touch.identifier}`;
-            workspace.append(dot);
-            console.log("create dot", dot.id);
-        })
     }
 
-    function touchendFunction(e){*/
-        /*[...e.changedTouches].forEach(touch => {
-            const dot = document.getElementById(`dot${touch.identifier}`);
-            dot.remove();
-            console.log("remove dot", dot.id);
-        })*/
+    function touchendFunction(e){
 
-        /*e.preventDefault();
+        e.preventDefault();
         e.stopPropagation();
         console.log(`${e.type} in ${this.id} ${isMoving} ${isDblclicking}`);
         
@@ -153,12 +141,12 @@ if (isMoble()){
     
         originX = mouseX;
         originY = mouseY;
-    }*/
+    }
     
     
 
     /* addEventListener */
-    /*[...document.querySelectorAll(".target")].forEach(function(item){
+    [...document.querySelectorAll(".target")].forEach(function(item){
     
         item.addEventListener("touchend", touchendFunction);
     
@@ -201,11 +189,11 @@ if (isMoble()){
 
             }
         }
-    })*/
+    })
 
-    /*workspace.addEventListener("touchend", touchendFunction);
+    workspace.addEventListener("touchend", touchendFunction);
 
-    document.addEventListener("touchmove", function(e){
+    /*document.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
 
@@ -217,131 +205,9 @@ if (isMoble()){
                 dragBox.style["top"] = localStorage.getItem("itemY");
                 return;
             }
-            /*if (selectedBox != null){
-
-            }
         }
     })*/
-
-
-    /* Function */
-    function clickFunction(e){
-        e.preventDefault();
-        e.stopPropagation();
-        console.log(`${e.type} in ${this.id} ${isMoving} ${isDblclicking}`);
-
-        if (isMoving && isDblclicking){
-            return;
-        }
-
-        if (!isMoving && isDblclicking){ //跟隨狀況下的普通的點擊
-            isDblclicking = false;
-            document.removeEventListener("touchmove", mousemoveFunction);
-            return;
-        }
-
-        if (!isMoving){ //普通的點擊
-            document.removeEventListener("touchmove", mousemoveFunction);
-        }
-
-        if (!isDblclicking && isMoving){ //drag結束
-            isMoving = false;
-            document.removeEventListener("touchmove", mousemoveFunction);
-            return;
-        }
-
-        if (this.id == "workspace" && !isMoving){ //取消選取
-            document.getElementById(localStorage.getItem("selectedID")).style.backgroundColor = "red";
-            return;
-        }
-
-        var nowBoxID = localStorage.getItem("selectedID"); //開始上色
-        if (document.getElementById(nowBoxID) !== null && nowBoxID !== this.id && nowBoxID !== null){
-            document.getElementById(nowBoxID).style.backgroundColor = "red";
-        }
-        localStorage.setItem("selectedID", this.id);
-        this.style.backgroundColor = "#00f";
-
-
-        if (isDblclick()){
-            isDblclicking = true;
-
-            localStorage.setItem("dragID", this.id);
-            localStorage.setItem("itemX", this.style.left);
-            localStorage.setItem("itemY", this.style.top);
-
-            originX = parseInt(e.changedTouches[0].clientX);
-            originY = parseInt(e.changedTouches[0].clientY);
-
-            document.addEventListener("touchmove", mousemoveFunction);
-        }
-    }
-
-    function mousemoveFunction(e){
-        console.log(`${e.type} in mousemove`);
-        e.stopPropagation();
-        isMoving = true;
-
-        var dragBox = document.getElementById(localStorage.getItem("dragID"));
-        let mouseX = parseInt(e.changedTouches[0].clientX);
-        let mouseY = parseInt(e.changedTouches[0].clientY);
-
-        let dx = mouseX - originX;
-        let dy = mouseY - originY;
-
-        dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
-        dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
-
-        originX = mouseX;
-        originY = mouseY;
-    }
-
-
-
-    /* addEventListener */
-    [...document.querySelectorAll(".target")].forEach(function(item){
-
-        item.addEventListener("touchend", clickFunction);
-
-        item.addEventListener("touchstart", function(e){
-            console.log(`${e.type} in down`);
-            e.preventDefault();
-
-            localStorage.setItem("dragID", this.id);
-            localStorage.setItem("itemX", this.style.left);
-            localStorage.setItem("itemY", this.style.top);
-            isMoving = false;
-
-            originX = parseInt(e.changedTouches[0].clientX);
-            originY = parseInt(e.changedTouches[0].clientY);
-
-            document.addEventListener("touchmove", mousemoveFunction);
-        })
-
-        document.addEventListener("keydown", function(e){
-            console.log(e.type);
-            if (e.code == "Escape" && (isMoving || isDblclicking)){
-                document.removeEventListener(events[deviceType].move, mousemoveFunction);
-
-                var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                dragBox.style["left"] = localStorage.getItem("itemX");
-                dragBox.style["top"] = localStorage.getItem("itemY");
-            }
-        })
-
-    })
-    workspace.addEventListener("touchstart", function(e){
-        e.preventDefault();
-        if (isDblclicking){
-            isMoving = false;
-        }
-    })
-    workspace.addEventListener("touchmove", function(e){
-        e.preventDefault();
-        isMoving = true;
-    })
-    workspace.addEventListener("touchend", clickFunction);
-
+    
 } else {
 
     /* Function */
