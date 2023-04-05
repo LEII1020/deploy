@@ -186,19 +186,15 @@ if (isMoble()){
             let dx = lengthX - originX;
             let dy = lengthY - originY;
 
-            console.log(dx, dy);
+            console.log(dx, dy, selectedBox.style["width"], "past");
 
-            dragBox.style["width"] = parseInt(dragBox.style["width"].slice(0,-2)) + dx + "px";
-            dragBox.style["height"] = parseInt(dragBox.style["height"].slice(0,-2)) + dx + "px";
-            //dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
-            //dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
+            selectedBox.style["width"] = parseInt(selectedBox.style["width"].slice(0,-2)) + dx + "px";
+            selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
             //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
-        
+            console.log(dx, dy, selectedBox.style["width"], "now");
             originX = lengthX;
             originY = lengthY;
 
-            
-        
             return;
         }
 
