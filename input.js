@@ -85,6 +85,12 @@ if (isMoble()){
                 localStorage.setItem("sizingY", selectedBox.style.top);
                 originX = parseInt(touchPosition[0][0]) - parseInt(touchPosition[1][0]);
                 originY = parseInt(touchPosition[0][1]) - parseInt(touchPosition[1][1]);
+                if (originX < 0){
+                    originX = -originX;
+                }
+                if (originY < 0){
+                    originY = -originY;
+                }
 
                 document.addEventListener("touchmove", touchmoveFunction);
             }
@@ -180,6 +186,13 @@ if (isMoble()){
 
             let lengthX = parseInt(e.changedTouches[0].clientX) - parseInt(e.changedTouches[1].clientX);
             let lengthY = parseInt(e.changedTouches[0].clientY) - parseInt(e.changedTouches[1].clientY);
+
+            if (lengthX < 0){
+                lengthX = -lengthX;
+            }
+            if (lengthY < 0){
+                lengthY = -lengthY;
+            }
             
             console.log("success2");
 
