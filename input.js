@@ -18,6 +18,7 @@ for (var i = 0; i < boxes.length; i++){
 var isMoving = false; //紀錄是否正在移動(通常用於drag)
 var isDblclicking = false; //紀錄是否為跟隨的狀態
 var isSizing = false; //紀錄是否為調整大小的狀態
+var isSizingDbCheck = false;
 var isHorizontal = false; //紀錄為水平調整或垂直調整
 var allCancel = false; //紀錄abort
 var trueCancel = false; //紀錄abort，因為ablort後會有兩次的touchend
@@ -85,6 +86,7 @@ if (isMoble()){
                 })
 
                 isSizing = false;
+                isSizingDbCheck = false;
                 originX = parseInt(touchPosition[0][0]) - parseInt(touchPosition[1][0]);
                 originY = parseInt(touchPosition[0][1]) - parseInt(touchPosition[1][1]);
                 if (originX < 0){
@@ -128,14 +130,22 @@ if (isMoble()){
             return;
         }
         
-        if (e.touches.length == 0 && isSizing){ //結束sizing
-            isSizing = false;
-            document.removeEventListener("touchmove", touchmoveFunction);
-            return;
+        if (isSizing){
+            if (e.touches.length == 0){//結束sizing
+                isSizing = false;
+                document.removeEventListener("touchmove", touchmoveFunction);
+                return;
+            }
+            if (e.touches.length == 1){
+                if (isSizingDbCheck){ //還在sizing
+                    return;
+                } else { //abort
+                    trueCancel = true;
+                }
+            }
         }
 
-        if ((isMoving && isDblclicking) || (e.touches.length == 1 && isSizing)){ //還在跟隨或sizing
-            console.log("Yes");
+        if (isMoving && isDblclicking){ //還在跟隨
             return;
         }
 
@@ -195,6 +205,7 @@ if (isMoble()){
         
         if (e.touches.length == 2){
             isSizing = true;
+            isSizingDbCheck = true;
 
             if (isHorizontal){
                 let lengthX = parseInt(e.changedTouches[0].clientX) - parseInt(e.changedTouches[1].clientX);
@@ -222,7 +233,6 @@ if (isMoble()){
 
         } else {
             if (isSizing){
-                console.log("waiting");
                 return;
             } else {
                 isMoving = true;
