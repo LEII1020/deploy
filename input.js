@@ -221,6 +221,7 @@ if (isMoble()){
 
         } else {
             if (isSizing){
+                console.log("waiting");
                 return;
             } else {
                 isMoving = true;
