@@ -75,16 +75,18 @@ if (isMoble()){
                 return;
             }
             if (selectedBox != null){
-                
                 [...e.touches].forEach(touch => {
-                    touchPosition.push([touch.identifier, touch.clientX, touch.clientY]);
+                    touchPosition.push([touch.clientX, touch.clientY]);
                 })
                 console.log(touchPosition);
                 isSizing = false;
-                var sizingBox = selectedBox;
-                localStorage.setItem("sizingID", sizingBox.id);
-                localStorage.setItem("sizingX", sizingBox.style.left);
-                localStorage.setItem("sizingY", sizingBox.style.top);
+                localStorage.setItem("sizingID", selectedBox.id);
+                localStorage.setItem("sizingX", selectedBox.style.left);
+                localStorage.setItem("sizingY", selectedBox.style.top);
+                originX = parseInt(touchPosition[0][0]) - parseInt(touchPosition[1][0]);
+                originY = parseInt(touchPosition[0][1]) - parseInt(touchPosition[1][1]);
+
+                document.addEventListener("touchmove", touchmoveFunction);
             }
         }
 
@@ -172,34 +174,30 @@ if (isMoble()){
         e.stopPropagation();
         
         if (e.touches.length == 2){
+
             console.log("success");
             isSizing = true;
 
-            let mouseX = parseInt(e.changedTouches[0].clientX);
-            let mouseY = parseInt(e.changedTouches[0].clientY);
-
-            if (e.changedTouches[0].identifier == touchPosition[0][0]){
-                let dx = mouseX - touchPosition[0][1];
-                let dy = mouseY - touchPosition[0][2];
-                touchPosition[0][1] = mouseX;
-                touchPosition[0][2] = mouseY;
-            }else{
-                let dx = mouseX - touchPosition[1][1];
-                let dy = mouseY - touchPosition[1][2];
-                touchPosition[0][1] = mouseX;
-                touchPosition[0][2] = mouseY;
-            }
-
-            console.log(dx, dy, touchPosition[0][0]);
-            
+            let lengthX = parseInt(e.touches[0].clientX) - parseInt(e.touches[1].clientX);
+            let lengthY = parseInt(e.touches[0].clientY) - parseInt(e.touches[1].clientY);
+        
+            let dx = lengthX - originX;
+            let dy = lengthY - originY;
+        
             dragBox.style["width"] = parseInt(dragBox.style["width"].slice(0,-2)) + dx + "px";
             dragBox.style["height"] = parseInt(dragBox.style["height"].slice(0,-2)) + dx + "px";
             //dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
             //dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
-
             //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
+        
+            originX = lengthX;
+            originY = lengthY;
+
+            console.log(dx, dy, touchPosition[0][0]);
+        
             return;
         }
+        
         isMoving = true;
         var dragBox = document.getElementById(localStorage.getItem("dragID"));
         //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
@@ -253,35 +251,8 @@ if (isMoble()){
 
     document.addEventListener("touchstart", touchstartFunction)
 
-    /*workspace.addEventListener("touchmove", function(e){
-        e.preventDefault();
-        isMoving = true;
-        console.log(isDblclicking, e.type);
-        //console.log("189", localStorage.getItem("dragID"));
-        //console.log(localStorage.getItem("dragID"), "is moving");
-
-        if (e.touches.length == 2){ //取消與size的變化
-            if (localStorage.getItem("dragID") != null || isDblclicking){
-                document.removeEventListener("mousemove", touchmoveFunction);
-                var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                dragBox.style["left"] = localStorage.getItem("itemX");
-                dragBox.style["top"] = localStorage.getItem("itemY");
-                return;
-            }
-            if (selectedBox != null){
-
-            }
-        }
-    })*/
-
     workspace.addEventListener("touchend", touchendFunction);
 
-    /*document.addEventListener("touchmove", function(e){
-        e.preventDefault();
-        isMoving = true;
-
-        
-    })*/
     
 } else {
 
