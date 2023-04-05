@@ -125,7 +125,6 @@ if (isMoble()){
     
     function mousemoveFunction(e){
         console.log("139", localStorage.getItem("dragID", null));
-        console.log(localStorage.getItem("dragID", this.id), "is moving");
         e.stopPropagation();
         isMoving = true;
     
@@ -138,6 +137,8 @@ if (isMoble()){
     
         dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
         dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
+
+        console.log(localStorage.getItem(dragBox.style["left"], dragBox.style["top"]));
     
         originX = mouseX;
         originY = mouseY;
@@ -177,7 +178,7 @@ if (isMoble()){
         console.log("189", localStorage.getItem("dragID", null));
         console.log(localStorage.getItem("dragID", this.id), "is moving");
 
-        if (e.touches.length == 2){ //取消與size的變化
+        /*if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
                 document.removeEventListener("mousemove", mousemoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
@@ -188,7 +189,7 @@ if (isMoble()){
             if (selectedBox != null){
 
             }
-        }
+        }*/
     })
 
     workspace.addEventListener("touchend", touchendFunction);
