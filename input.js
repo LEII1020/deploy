@@ -126,14 +126,17 @@ if (isMoble()){
     
     function mousemoveFunction(e){
         //console.log("139", localStorage.getItem("dragID"));
+
         e.preventDefault();
         e.stopPropagation();
         isMoving = true;
     
         var dragBox = document.getElementById(localStorage.getItem("dragID"));
+        console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
         if (dragBox == null){
             return;
         }
+        console.log("After dragbox");
         let mouseX = parseInt(e.changedTouches[0].clientX);
         let mouseY = parseInt(e.changedTouches[0].clientY);
     
@@ -160,7 +163,7 @@ if (isMoble()){
             e.preventDefault();
             
             if (!isDblclicking){
-                console.log("not dblclick");
+                console.log(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
                 localStorage.setItem("dragID", this.id);
                 localStorage.setItem("itemX", this.style.left);
                 localStorage.setItem("itemY", this.style.top);
