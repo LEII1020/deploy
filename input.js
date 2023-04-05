@@ -161,6 +161,16 @@ if (isMoble()){
         item.addEventListener("touchstart", function(e){
             e.preventDefault();
             
+            if (e.touches.length == 2){ //取消與size的變化
+                if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
+                    document.removeEventListener("mousemove", touchmoveFunction);
+                    var dragBox = document.getElementById(localStorage.getItem("dragID"));
+                    dragBox.style["left"] = localStorage.getItem("itemX");
+                    dragBox.style["top"] = localStorage.getItem("itemY");
+                    return;
+                }
+            }
+
             if (!isDblclicking){
                 console.log(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
                 localStorage.setItem("dragID", this.id);
@@ -177,15 +187,7 @@ if (isMoble()){
             isMoving = false;
             document.addEventListener("touchmove", touchmoveFunction);
 
-            if (e.touches.length == 2){ //取消與size的變化
-                if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
-                    document.removeEventListener("mousemove", touchmoveFunction);
-                    var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                    dragBox.style["left"] = localStorage.getItem("itemX");
-                    dragBox.style["top"] = localStorage.getItem("itemY");
-                    return;
-                }
-            }
+            
         })
     })
 
