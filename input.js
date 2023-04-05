@@ -54,6 +54,7 @@ function isDblclick(){
 }
 
 if (isMoble()){
+    console.log(isMoble());
 
     /* Function */
     function touchstartFunction(e) {
@@ -138,7 +139,7 @@ if (isMoble()){
         dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
         dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
 
-        console.log(dragBox.style["left"], dragBox.style["top"]);
+        console.log(e.type, dragBox.style["left"], dragBox.style["top"]);
     
         originX = mouseX;
         originY = mouseY;
@@ -210,6 +211,8 @@ if (isMoble()){
     })*/
     
 } else {
+    console.log(isMoble());
+
 
     /* Function */
     function clickFunction(e){
