@@ -57,7 +57,7 @@ if (isMoble()){
 
     /* Function */
     function touchstartFunction(e) {
-        console.log(e.type, this);
+        //console.log(e.type, this);
         e.preventDefault();
         if (isDblclicking){
             isMoving = false;
@@ -68,7 +68,7 @@ if (isMoble()){
 
         e.preventDefault();
         e.stopPropagation();
-        console.log(`${e.type} in ${this.id} ${isMoving} ${isDblclicking}`);
+        //console.log(`${e.type} in ${this.id} ${isMoving} ${isDblclicking}`);
         
 
         if (isMoving && isDblclicking){
@@ -86,10 +86,10 @@ if (isMoble()){
         }
 
         if (!isDblclicking && isMoving){ //drag結束
-            console.log("101", localStorage.getItem("dragID", null));
+            //console.log("101", localStorage.getItem("dragID"));
             isMoving = false;
             localStorage.setItem("dragID", null);
-            console.log("104", localStorage.getItem("dragID", null));
+            //console.log("104", localStorage.getItem("dragID"));
             document.removeEventListener("touchmove", mousemoveFunction);
             return;
         }
@@ -111,11 +111,11 @@ if (isMoble()){
 
         if (isDblclick()){
             isDblclicking = true;
-            console.log("126", localStorage.getItem("dragID", null));
+            //console.log("126", localStorage.getItem("dragID"));
             localStorage.setItem("dragID", this.id);
             localStorage.setItem("itemX", this.style.left);
             localStorage.setItem("itemY", this.style.top);
-            console.log("130", localStorage.getItem("dragID", null));
+            //console.log("130", localStorage.getItem("dragID"));
             originX = parseInt(e.changedTouches[0].clientX);
             originY = parseInt(e.changedTouches[0].clientY);
 
@@ -124,7 +124,7 @@ if (isMoble()){
     }
     
     function mousemoveFunction(e){
-        console.log("139", localStorage.getItem("dragID", null));
+        //console.log("139", localStorage.getItem("dragID"));
         e.stopPropagation();
         isMoving = true;
     
@@ -138,7 +138,7 @@ if (isMoble()){
         dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
         dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
 
-        console.log(localStorage.getItem(dragBox.style["left"], dragBox.style["top"]));
+        console.log(dragBox.style["left"], dragBox.style["top"]);
     
         originX = mouseX;
         originY = mouseY;
@@ -153,13 +153,13 @@ if (isMoble()){
     
         item.addEventListener("touchstart", function(e){
             e.preventDefault();
-            console.log("167", localStorage.getItem("dragID", null));
+            //console.log("167", localStorage.getItem("dragID"));
             if (!isDblclicking){
                 localStorage.setItem("dragID", this.id);
                 localStorage.setItem("itemX", this.style.left);
                 localStorage.setItem("itemY", this.style.top);
                 
-                console.log("173", localStorage.getItem("dragID", null));
+                //console.log("173", localStorage.getItem("dragID"));
         
                 originX = parseInt(e.changedTouches[0].clientX);
                 originY = parseInt(e.changedTouches[0].clientY);
@@ -175,8 +175,8 @@ if (isMoble()){
     workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
-        console.log("189", localStorage.getItem("dragID", null));
-        console.log(localStorage.getItem("dragID", this.id), "is moving");
+        //console.log("189", localStorage.getItem("dragID"));
+        //console.log(localStorage.getItem("dragID"), "is moving");
 
         /*if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
@@ -267,7 +267,7 @@ if (isMoble()){
             localStorage.setItem("dragID", this.id);
             localStorage.setItem("itemX", this.style.left);
             localStorage.setItem("itemY", this.style.top);
-            console.log(`in dblclick: ${localStorage.getItem("dragID")} left: ${localStorage.getItem("itemX")} top: ${localStorage.getItem("itemY")}`);
+            //console.log(`in dblclick: ${localStorage.getItem("dragID")} left: ${localStorage.getItem("itemX")} top: ${localStorage.getItem("itemY")}`);
             isDblclicking = true;
 
             originX = parseInt(e.clientX);
@@ -278,11 +278,11 @@ if (isMoble()){
 
         item.addEventListener("mousedown", function(e){
             e.preventDefault();
-            console.log(this.style.left);
+            //console.log(this.style.left);
             localStorage.setItem("dragID", this.id);
             localStorage.setItem("itemX", this.style.left);
             localStorage.setItem("itemY", this.style.top);
-            console.log(`in dblclick: ${localStorage.getItem("dragID")} left: ${localStorage.getItem("itemX")} top: ${localStorage.getItem("itemY")}`);
+            //console.log(`in dblclick: ${localStorage.getItem("dragID")} left: ${localStorage.getItem("itemX")} top: ${localStorage.getItem("itemY")}`);
             isMoving = false;
 
             originX = parseInt(e.clientX);
