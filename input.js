@@ -59,6 +59,17 @@ if (isMoble()){
     function touchstartFunction(e) {
         console.log(e.type);
         e.preventDefault();
+
+        if (e.touches.length == 2){ //取消與size的變化
+            if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
+                document.removeEventListener("mousemove", touchmoveFunction);
+                var dragBox = document.getElementById(localStorage.getItem("dragID"));
+                dragBox.style["left"] = localStorage.getItem("itemX");
+                dragBox.style["top"] = localStorage.getItem("itemY");
+                return;
+            }
+        }
+
         if (isDblclicking){
             isMoving = false;
         }
@@ -160,16 +171,6 @@ if (isMoble()){
     
         item.addEventListener("touchstart", function(e){
             e.preventDefault();
-            
-            if (e.touches.length == 2){ //取消與size的變化
-                if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
-                    document.removeEventListener("mousemove", touchmoveFunction);
-                    var dragBox = document.getElementById(localStorage.getItem("dragID"));
-                    dragBox.style["left"] = localStorage.getItem("itemX");
-                    dragBox.style["top"] = localStorage.getItem("itemY");
-                    return;
-                }
-            }
 
             if (!isDblclicking){
                 console.log(e.changedTouches[0].clientX, e.changedTouches[0].clientY);
@@ -191,7 +192,7 @@ if (isMoble()){
         })
     })
 
-    workspace.addEventListener("touchstart", touchstartFunction)
+    document.addEventListener("touchstart", touchstartFunction)
 
     /*workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
