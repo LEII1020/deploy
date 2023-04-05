@@ -67,7 +67,7 @@ if (isMoble()){
 
         if (e.touches.length == 2){ //取消與size的變化
             console.log("two finger", selectedBox, localStorage.getItem("dragID"), isDblclicking);
-            if (localStorage.getItem("dragID") != null || isDblclicking){ //取消拖移
+            if (localStorage.getItem("dragID") !== "null" || isDblclicking){ //取消拖移
                 document.removeEventListener("touchmove", touchmoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
                 dragBox.style["left"] = localStorage.getItem("itemX");
