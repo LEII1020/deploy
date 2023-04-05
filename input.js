@@ -69,6 +69,10 @@ if (isMoble()){
 
         if (e.touches.length == 2){ //負責abort 與 size的變化
 
+            if (trueCancel){
+                return;
+            }
+
             if (localStorage.getItem("dragID") !== "null" || isDblclicking){ //abort 取消拖移以及sizing
                 document.removeEventListener("touchmove", touchmoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
@@ -149,7 +153,7 @@ if (isMoble()){
             return;
         }
 
-        if (!isMoving && isDblclicking){ //跟隨狀況下的普通的點擊
+        if (!isMoving && isDblclicking){ //跟隨狀況下的普通點擊
             isDblclicking = false;
             document.removeEventListener("touchmove", touchmoveFunction);
             return;
@@ -176,7 +180,6 @@ if (isMoble()){
             localStorage.setItem("itemX", null);
             localStorage.setItem("itemY", null);
         }
-
 
         var nowBoxID = localStorage.getItem("selectedID"); //開始上色
         if (document.getElementById(nowBoxID) !== null && nowBoxID !== this.id && nowBoxID !== null){
