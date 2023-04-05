@@ -174,14 +174,14 @@ if (isMoble()){
 
     workspace.addEventListener("touchstart", touchstartFunction)
 
-    workspace.addEventListener("touchmove", function(e){
+    /*workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
-        console.log(e.type);
+        console.log(isDblclicking, e.type);
         //console.log("189", localStorage.getItem("dragID"));
         //console.log(localStorage.getItem("dragID"), "is moving");
 
-        /*if (e.touches.length == 2){ //取消與size的變化
+        if (e.touches.length == 2){ //取消與size的變化
             if (localStorage.getItem("dragID") != null || isDblclicking){
                 document.removeEventListener("mousemove", mousemoveFunction);
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
@@ -192,8 +192,8 @@ if (isMoble()){
             if (selectedBox != null){
 
             }
-        }*/
-    })
+        }
+    })*/
 
     workspace.addEventListener("touchend", touchendFunction);
 
