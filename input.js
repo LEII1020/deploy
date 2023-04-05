@@ -82,6 +82,7 @@ if (isMoble()){
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
                 dragBox.style["left"] = localStorage.getItem("itemX");
                 dragBox.style["top"] = localStorage.getItem("itemY");
+                localStorage.setItem("dragID", "null")
                 allCancel = true;
                 return;
             }
