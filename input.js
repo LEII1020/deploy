@@ -85,10 +85,6 @@ if (isMoble()){
                 })
 
                 isSizing = false;
-                localStorage.setItem("sizingID", selectedBox.id);
-                localStorage.setItem("sizingX", selectedBox.style.left);
-                localStorage.setItem("sizingY", selectedBox.style.top);
-
                 originX = parseInt(touchPosition[0][0]) - parseInt(touchPosition[1][0]);
                 originY = parseInt(touchPosition[0][1]) - parseInt(touchPosition[1][1]);
                 if (originX < 0){
@@ -119,6 +115,10 @@ if (isMoble()){
         e.stopPropagation();
         //console.log(e.type, isMoving, isDblclicking);
         
+        if (e.touches.length == 0 && isSizing){
+            isSizing = false;
+            document.removeEventListener("touchmove", touchmoveFunction);
+        }
 
         if ((isMoving && isDblclicking) || (e.touches.length == 1 && isSizing)){
             return;
@@ -213,14 +213,14 @@ if (isMoble()){
                 let dy = lengthY - originY;
                 if ((parseInt(selectedBox.style["height"].slice(0,-2)) + dy) >= 10){
                     selectedBox.style["height"] = parseInt(selectedBox.style["height"].slice(0,-2)) + dy + "px";
-                    selectedBox.style["top"] = (parseFloat(selectedBox.style["top"].slice(0,-2)) - (dx/2)) + "px";
+                    selectedBox.style["top"] = (parseFloat(selectedBox.style["top"].slice(0,-2)) - (dy/2)) + "px";
                 }
                 originY = lengthY;
             }
 
         } else {
             if (isSizing){
-
+                return;
             } else {
                 isMoving = true;
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
