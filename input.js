@@ -160,6 +160,7 @@ if (isMoble()){
             e.preventDefault();
             
             if (!isDblclicking){
+                console.log("not dblclick");
                 localStorage.setItem("dragID", this.id);
                 localStorage.setItem("itemX", this.style.left);
                 localStorage.setItem("itemY", this.style.top);
@@ -172,7 +173,7 @@ if (isMoble()){
 
             console.log(e.type, localStorage.getItem("dragID"));
             isMoving = false;
-            workspace.addEventListener("touchmove", mousemoveFunction);
+            document.addEventListener("touchmove", mousemoveFunction);
         })
     })
 
