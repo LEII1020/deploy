@@ -61,9 +61,41 @@ if (isMoble()){
 
     /* Function */
 
+    function sizing(e){
+        e.preventDefault();
+        e.stopPropagation();
+        isSizing = true;
+
+        let mouseX = parseInt(e.changedTouches[0].clientX);
+        let mouseY = parseInt(e.changedTouches[0].clientY);
+
+        if (e.changedTouches[0].identifier == touchPosition[0][0]){
+            let dx = mouseX - touchPosition[0][1];
+            let dy = mouseY - touchPosition[0][2];
+            touchPosition[0][1] = mouseX;
+            touchPosition[0][2] = mouseY;
+        }else{
+            let dx = mouseX - touchPosition[1][1];
+            let dy = mouseY - touchPosition[1][2];
+            touchPosition[0][1] = mouseX;
+            touchPosition[0][2] = mouseY;
+        }
+
+        console.log(dx, dy, touchPosition[0][0]);
+        
+        dragBox.style["width"] = parseInt(dragBox.style["width"].slice(0,-2)) + dx + "px";
+        dragBox.style["height"] = parseInt(dragBox.style["height"].slice(0,-2)) + dx + "px";
+        //dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
+        //dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
+
+        //console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
+    
+        
+    }
+
     function touchstartFunction(e) {
         e.preventDefault();
-        
+
         if (e.touches.length == 2){ //取消與size的變化
             console.log("two finger", selectedBox, localStorage.getItem("dragID"), isDblclicking);
             if (localStorage.getItem("dragID") !== "null" || isDblclicking){ //取消拖移
@@ -75,22 +107,17 @@ if (isMoble()){
                 return;
             }
             if (selectedBox != null){
-                console.log("insizing");
                 document.removeEventListener("touchmove", touchmoveFunction);
                 [...e.touches].forEach(touch => {
                     touchPosition.push([touch.identifier, touch.clientX, touch.clientY]);
                 })
                 console.log(touchPosition);
-                isSizing = true;
-                var sizingBox = document.getElementById(selectedBox);
-                localStorage.setItem("sizingID", selectedBox);
+                isSizing = false;
+                var sizingBox = selectedBox;
+                localStorage.setItem("sizingID", sizingBox.id);
                 localStorage.setItem("sizingX", sizingBox.style.left);
                 localStorage.setItem("sizingY", sizingBox.style.top);
-
-                [...e.touches].forEach(touch => {
-                    touchPosition.pop();
-                })
-                
+                document.addEventListener("touchmove", sizingFunction)
             }
         }
 
@@ -155,7 +182,7 @@ if (isMoble()){
             document.getElementById(nowBoxID).style.backgroundColor = "red";
         }
         localStorage.setItem("selectedID", this.id);
-        selectedBox = this.id;
+        selectedBox = this;
         this.style.backgroundColor = "#00f";
 
 
