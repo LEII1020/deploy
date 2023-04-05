@@ -206,7 +206,7 @@ if (isMoble()){
         e.preventDefault();
         e.stopPropagation();
         
-        if (e.touches.length == 2){
+        if (e.touches.length == 2 && !trueCancel){
             isSizing = true;
             isSizingDbCheck = true;
 
