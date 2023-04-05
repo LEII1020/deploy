@@ -95,6 +95,7 @@ if (isMoble()){
         }
 
         if (!isMoving && !isDblclicking && allCancel){ //普通的點擊
+            allCancel = false;
             return;
         }
 
