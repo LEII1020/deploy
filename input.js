@@ -58,7 +58,7 @@ if (isMoble()){
 
     /* Function */
     function touchstartFunction(e) {
-        //console.log(e.type, this);
+        console.log(e.type);
         e.preventDefault();
         if (isDblclicking){
             isMoving = false;
@@ -69,7 +69,7 @@ if (isMoble()){
 
         e.preventDefault();
         e.stopPropagation();
-        //console.log(`${e.type} in ${this.id} ${isMoving} ${isDblclicking}`);
+        console.log(e.type);
         
 
         if (isMoving && isDblclicking){
@@ -139,7 +139,7 @@ if (isMoble()){
         dragBox.style["left"] = parseInt(dragBox.style["left"].slice(0,-2)) + dx + "px";
         dragBox.style["top"] = parseInt(dragBox.style["top"].slice(0,-2)) + dy + "px";
 
-        console.log(e.type, dragBox.style["left"], dragBox.style["top"]);
+        console.log(e.type, dragBox.style["left"], dragBox.style["top"], dragBox.id);
     
         originX = mouseX;
         originY = mouseY;
@@ -154,7 +154,7 @@ if (isMoble()){
     
         item.addEventListener("touchstart", function(e){
             e.preventDefault();
-            //console.log("167", localStorage.getItem("dragID"));
+            
             if (!isDblclicking){
                 localStorage.setItem("dragID", this.id);
                 localStorage.setItem("itemX", this.style.left);
@@ -165,7 +165,8 @@ if (isMoble()){
                 originX = parseInt(e.changedTouches[0].clientX);
                 originY = parseInt(e.changedTouches[0].clientY);
             }
-            
+
+            console.log(e.type, localStorage.getItem("dragID"));
             isMoving = false;
             document.addEventListener("touchmove", mousemoveFunction);
         })
@@ -176,6 +177,7 @@ if (isMoble()){
     workspace.addEventListener("touchmove", function(e){
         e.preventDefault();
         isMoving = true;
+        console.log(e.type);
         //console.log("189", localStorage.getItem("dragID"));
         //console.log(localStorage.getItem("dragID"), "is moving");
 
