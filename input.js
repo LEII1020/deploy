@@ -171,7 +171,7 @@ if (isMoble()){
 
             console.log(e.type, localStorage.getItem("dragID"));
             isMoving = false;
-            window.addEventListener("touchmove", mousemoveFunction);
+            workspace.addEventListener("touchmove", mousemoveFunction);
         })
     })
 
