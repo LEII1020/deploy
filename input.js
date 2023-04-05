@@ -66,6 +66,7 @@ if (isMoble()){
                 var dragBox = document.getElementById(localStorage.getItem("dragID"));
                 dragBox.style["left"] = localStorage.getItem("itemX");
                 dragBox.style["top"] = localStorage.getItem("itemY");
+                isMoving = false;
                 return;
             }
         }
