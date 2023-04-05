@@ -150,6 +150,7 @@ if (isMoble()){
                     return;
                 } else { //abort
                     trueCancel = true;
+                    return;
                 }
             }
         }
